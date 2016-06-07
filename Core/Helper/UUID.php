@@ -9,7 +9,7 @@
 
 
 
-class UUID {
+class Core_Helper_UUID {
     /**
      * @var Core_Helper_Net_Tcp
      */
