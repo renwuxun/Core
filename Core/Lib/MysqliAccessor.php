@@ -34,7 +34,7 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
 
         $conf = Core_Lib_App::app()->getConfig()->get('modelServers.'.$modelName);
         if ($conf['sid'] > 0) {
-            $ipport = Core_Lib_L5::getInstance()->route($conf['sid']);
+            $ipport = Core_Helper_L5::getInstance()->route($conf['sid']);
             if (!empty($ipport) && $ipport[1] != '0') {
                 $conf['host'] = $ipport[0];
                 $conf['port'] = $ipport[1];
