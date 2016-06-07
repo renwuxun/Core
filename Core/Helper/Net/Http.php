@@ -1,16 +1,15 @@
 <?php
 
-namespace Core\Helper\Net;
 
 
-class Http {
+class Core_Helper_Net_Http {
 
 	const MAX_LINE_SIZE = 2048;
 
 	protected function __construct() {}
 
 	/**
-	 * @param Tcp $tcp
+	 * @param Core_Helper_Net_Tcp $tcp
 	 * @param int $timeoutsec
 	 * @return string
 	 */
@@ -28,7 +27,7 @@ class Http {
 	}
 
 	/**
-	 * @param $tcp Tcp
+	 * @param $tcp Core_Helper_Net_Tcp
 	 * @param $header
 	 * @param $errno
 	 * @param $errstr
@@ -90,7 +89,7 @@ class Http {
 	}
 
 	/**
-	 * @param $tcp Tcp
+	 * @param $tcp Core_Helper_Net_Tcp
 	 * @param $uri
 	 * @param $data
 	 * @param $errno

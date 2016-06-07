@@ -6,12 +6,10 @@
  * Time: 16:54
  */
 
-namespace Test\Config;
 
 
-use Core\Lib\Config;
 
-class ConfigDev extends Config {
+class Test_Config_Dev extends Core_Lib_Config {
     public static function config() {
         return [];
     }

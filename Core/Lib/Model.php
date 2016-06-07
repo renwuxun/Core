@@ -6,9 +6,8 @@
  * Time: 13:49
  */
 
-namespace Core\Lib;
 
 
-abstract class Model extends DataObject {
+abstract class Core_Lib_Model extends Core_Lib_DataObject {
 
 }

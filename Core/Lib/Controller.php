@@ -6,10 +6,8 @@
  * Time: 17:57
  */
 
-namespace Core\Lib;
 
-
-abstract class Controller {
+abstract class Core_Lib_Controller {
 
     /**
      * @var array
@@ -17,12 +15,12 @@ abstract class Controller {
     private $interceptors;
 
     /**
-     * @var Layout
+     * @var Core_Lib_Layout
      */
     private $layout;
 
     /**
-     * @var View
+     * @var Core_Lib_View
      */
     private $view;
 
@@ -67,7 +65,7 @@ abstract class Controller {
         $skipLogic = false;
         foreach ($this->getInterceptors() as $sInterceptor => $applyActs) {
             if (empty($applyActs) || in_array($sAction, $applyActs)) {
-                /** @var $interceptor Interceptor */
+                /** @var $interceptor Core_Lib_Interceptor */
                 $interceptor = new $sInterceptor;
                 $interceptors[] = $interceptor;
                 if (false === $interceptor->before($sAction)) {
@@ -93,7 +91,7 @@ abstract class Controller {
     abstract public function indexAction();
 
     /**
-     * @return Layout
+     * @return Core_Lib_Layout
      */
     public function getLayout() {
         return $this->layout;
@@ -101,7 +99,7 @@ abstract class Controller {
 
     /**
      * 请注意避免形成layout死循环
-     * @param Layout $layout
+     * @param Core_Lib_Layout $layout
      * @throws Exception
      */
     public function setLayout($layout) {
@@ -109,18 +107,18 @@ abstract class Controller {
     }
 
     /**
-     * @return View
+     * @return Core_Lib_View
      */
     public function getView() {
         if (null === $this->view) {
-            $this->view = new View;
+            $this->view = new Core_Lib_View;
             $this->view->init(self::viewPath());
         }
         return $this->view;
     }
 
     public function render($sView, $status = 200, $headers = []) {
-        $response = App::app()->getResponse();
+        $response = Core_Lib_App::app()->getResponse();
         foreach ($headers as $k => $v) {
             $response->setHeader($k, $v);
         }
@@ -129,14 +127,14 @@ abstract class Controller {
     }
 
     public function renderJson($data = null, $status = 200, $headers = []) {
-        $response = App::app()->getResponse();
+        $response = Core_Lib_App::app()->getResponse();
         $response->setHeader('Content-Type', 'application/javascript;charset=utf8');
         foreach ($headers as $k => $v) {
             $response->setHeader($k, $v);
         }
         $response->setStatus($status);
         if (null === $data) {
-            $data = new \ArrayObject;
+            $data = new ArrayObject;
         }
         return json_encode($data);
     }
@@ -159,17 +157,17 @@ abstract class Controller {
 
 
     /**
-     * @return Response
+     * @return Core_Lib_Response
      */
     public function getResponse() {
-        return App::app()->getResponse();
+        return Core_Lib_App::app()->getResponse();
     }
 
     /**
-     * @return Request
+     * @return Core_Lib_Request
      */
     public function getRequest() {
-        return App::app()->getRequest();
+        return Core_Lib_App::app()->getRequest();
     }
 
     /**

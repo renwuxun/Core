@@ -9,9 +9,9 @@
         "php": ">=5.3.2"
     },
     "autoload": {
-        "psr-4": {"Core\\": "Core/"}
+        "psr-0": {"Core_": "./"}
     },
     "autoload-dev": {
-        "psr-4": {"Test\\": "Test/"}
+        "psr-0": {"Test_": "./"}
     }
 }

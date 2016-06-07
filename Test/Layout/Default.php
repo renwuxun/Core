@@ -6,15 +6,13 @@
  * Time: 10:12
  */
 
-namespace Test\Layout;
 
 
-use Core\Lib\Layout;
 
-class DefaultLayout extends Layout{
+class Test_Layout_Default extends Core_Lib_Layout{
 
     public function indexAction() {
         $this->assign('title', 'with layout');
-        return $this->render('Layout/DefaultLayout');
+        return $this->render('Layout/Default');
     }
 }

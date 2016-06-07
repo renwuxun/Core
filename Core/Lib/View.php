@@ -6,10 +6,9 @@
  * Time: 22:10
  */
 
-namespace Core\Lib;
 
 
-class View {
+class Core_Lib_View {
 
     private $__ = array();
     private $__basepath = '';
@@ -36,7 +35,7 @@ class View {
     }
 
     /**
-     * @param Widget $widget
+     * @param Core_Lib_Widget $widget
      * @return string
      */
     protected function widget($widget) {

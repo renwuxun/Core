@@ -6,10 +6,9 @@
  * Time: 19:46
  */
 
-namespace Core\Lib;
 
 
-abstract class Interceptor {
+abstract class Core_Lib_Interceptor {
 
     /**
      * @param $action string

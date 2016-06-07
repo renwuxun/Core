@@ -6,20 +6,16 @@
  * Time: 5:27
  */
 
-namespace Test\Controller;
 
 
-use Core\Lib\App;
-use Core\Lib\Controller;
-use Test\Layout\DefaultLayout;
 
-class Test extends Controller {
+class Test_Controller_Test extends Core_Lib_Controller {
 
     protected static function selfInterceptors() {
     }
 
     public function indexAction() {
-        $this->setLayout(new DefaultLayout());
+        $this->setLayout(new Test_Layout_Default());
         return $this->render('Test/Index');
     }
 
@@ -28,8 +24,8 @@ class Test extends Controller {
         return $this->renderJsonCb(['ab'=>'sfds'],200);
     }
 
-    public function hbAction() {
-        App::app()->getResponse()->setHeader('Content-Type', 'text/plain;charset=utf-8');
-        return 'test/hbdf';
+    public function hbAction($a='') {
+        Core_Lib_App::app()->getResponse()->setHeader('Content-Type', 'text/plain;charset=utf-8');
+        return 'test/hbdf/'.$a;
     }
 }

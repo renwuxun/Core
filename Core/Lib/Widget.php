@@ -6,10 +6,9 @@
  * Time: 23:26
  */
 
-namespace Core\Lib;
 
 
-abstract class Widget extends Controller {
+abstract class Core_Lib_Widget extends Core_Lib_Controller {
 
     protected $cacheHandler;
     protected $cacheExpire = 0;

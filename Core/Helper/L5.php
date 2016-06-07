@@ -6,19 +6,13 @@
  * Time: 16:31
  */
 
-namespace Core\Helper;
 
-
-use Core\Helper\Net\Http;
-use Core\Helper\Net\Tcp;
-use Core\Lib\App;
-
-class L5 {
+class Core_Helper_L5 {
     private $tcp;
     private static $instance;
     private function __construct() {
-        $l5conf = App::app()->getConfig()->get('L5Server');
-        $this->tcp = new Tcp($l5conf['host'], $l5conf['port']);
+        $l5conf = Core_Lib_App::app()->getConfig()->get('L5Server');
+        $this->tcp = new Core_Helper_Net_Tcp($l5conf['host'], $l5conf['port']);
         $this->tcp->connect();
     }
 
@@ -34,12 +28,12 @@ class L5 {
      * @return array [ip, port]
      */
     public function route($sid) {
-        $msg = Http::buildRequest('/get/'.$sid, '', 'GET');
+        $msg = Core_Helper_Net_Http::buildRequest('/get/'.$sid, '', 'GET');
         $this->tcp->send($msg);
-        $retheader = Http::readHeader($this->tcp);
+        $retheader = Core_Helper_Net_Http::readHeader($this->tcp);
         $errno = 0;
         $errstr = '';
-        $body = Http::readBody($this->tcp, $retheader, $errno, $errstr);
+        $body = Core_Helper_Net_Http::readBody($this->tcp, $retheader, $errno, $errstr);
         return explode(':', trim($body));
     }
 

@@ -6,11 +6,10 @@
  * Time: 16:44
  */
 
-namespace Core\Lib;
 
 
 
-abstract class Config{
+abstract class Core_Lib_Config{
 
     private $config = [];
 
@@ -51,8 +50,8 @@ abstract class Config{
     protected static function config() {
         return [
             'appId' => 9527,
-            'routeName' => 'Core\\Lib\\Route',
-            '404Controller' => 'Core\\Controller\\Notfound',
+            'routeName' => 'Core_Lib_Route',
+            '404Controller' => 'Core_Controller_Notfound',
             'UUIDServer' => ['host'=>'127.0.0.1', 'port'=>9527],
             'L5Server' => ['host'=>'127.0.0.1', 'port'=>9528]
         ];

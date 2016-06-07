@@ -6,10 +6,9 @@
  * Time: 18:37
  */
 
-namespace Core\Lib;
 
 
-class Request {
+class Core_Lib_Request {
 
     private $uri;
     private $path;

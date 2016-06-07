@@ -6,16 +6,12 @@
  * Time: 13:28
  */
 
-namespace Core\Lib;
 
 
-/**
- * Class DataAccessor
- */
-abstract class DataAccessor {
+abstract class Core_Lib_DataAccessor {
 
     /**
-     * @var DataAccessor[]
+     * @var static[]
      */
     protected static $instances;
 
@@ -65,7 +61,7 @@ abstract class DataAccessor {
      */
     public function filterByOp($key, $op, $val) {
         /**
-         * @var $modelName DataObject
+         * @var $modelName Core_Lib_DataObject
          */
         $modelName = $this->getModelName();
         if ($key == $modelName::keyField()) {
@@ -88,11 +84,11 @@ abstract class DataAccessor {
     }
 
     /**
-     * @return DataObject
+     * @return Core_Lib_DataObject
      */
     public function newDataObject(){
         /**
-         * @var DataObject $o
+         * @var Core_Lib_DataObject $o
          */
         $o = new $this->modelName;
         $o->setCreateByDataAccessor();
@@ -104,7 +100,7 @@ abstract class DataAccessor {
             $fields = array($fields);
         }
         /**
-         * @var $modelName DataObject
+         * @var $modelName Core_Lib_DataObject
          */
         $modelName = $this->getModelName();
         $this->loadFields = array_intersect(array_keys($modelName::fieldType()), $fields);
@@ -150,7 +146,7 @@ abstract class DataAccessor {
      */
     public function setField($key, $val) {
         /**
-         * @var $modelName DataObject
+         * @var $modelName Core_Lib_DataObject
          */
         $modelName = $this->getModelName();
         $fieldType = $modelName::fieldType();
@@ -180,7 +176,7 @@ abstract class DataAccessor {
     }
 
     /**
-     * @return DataObject[]
+     * @return Core_Lib_DataObject[]
      */
     abstract public function find();
 

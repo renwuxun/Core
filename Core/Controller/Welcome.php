@@ -6,12 +6,7 @@
  * Time: 17:54
  */
 
-namespace Core\Controller;
-
-
-use Core\Lib\Controller;
-
-class Welcome extends Controller{
+class Core_Controller_Welcome extends Core_Lib_Controller{
 
     public function indexAction() {
 

@@ -1,12 +1,11 @@
 <?php
 
-namespace Core\Helper\Net;
 
 
-class Udp {
+class Core_Helper_Net_Udp {
 
 	/**
-	 * @var Udp[]
+	 * @var self[]
 	 */
 	protected static $instances=array();
 

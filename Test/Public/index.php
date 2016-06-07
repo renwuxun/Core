@@ -8,22 +8,19 @@
  */
 
 
-$loader = require __DIR__ . '/../../vendor/autoload.php';
-
 
 define('PROJECT_PATH', strtr(dirname(__DIR__), '\\', '/'));
 
-$loader->add('Core', dirname(PROJECT_PATH));
-$loader->add('Test', dirname(PROJECT_PATH));
+
+$loader = require __DIR__ . '/../../Core/autoload.php';
+
+$loader->add('Test_', dirname(PROJECT_PATH));
 
 
-use Core\Lib\App;
-use Test\Config\ConfigDev;
 
-
-//Core\Helper\ClassCache::run(
+//Core_Helper_ClassCache::run(
 //    PROJECT_PATH.'/Cache/ClassesCached',
 //    function(){
-        App::createApp(new ConfigDev())->run();
+        Core_Lib_App::createApp(new Test_Config_Dev())->run();
 //    }
 //);

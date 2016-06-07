@@ -6,12 +6,10 @@
  * Time: 10:04
  */
 
-namespace Test\Widget;
 
 
-use Core\Lib\Widget;
 
-class TimeNow extends Widget{
+class Test_Widget_TimeNow extends Core_Lib_Widget{
 
     public function indexAction() {
         $this->assign('now', time());

@@ -6,10 +6,9 @@
  * Time: 22:16
  */
 
-namespace Core\Lib;
 
 
-abstract class Layout extends Widget {
+abstract class Core_Lib_Layout extends Core_Lib_Widget {
 
     protected static function viewPath() {
         return PROJECT_PATH . 'View/Layout/';

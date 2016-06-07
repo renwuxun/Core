@@ -6,24 +6,20 @@
  * Time: 18:25
  */
 
-namespace Core\Helper;
 
 
-use Core\Helper\Net\Http;
-use Core\Helper\Net\Tcp;
-use Core\Lib\App;
 
 class UUID {
     /**
-     * @var Tcp
+     * @var Core_Helper_Net_Tcp
      */
     private $tcp;
 
     private static $instance;
 
     private function __construct() {
-        $l5conf = App::app()->getConfig()->get('UUIDServer');
-        $this->tcp = new Tcp($l5conf['host'], $l5conf['port']);
+        $l5conf = Core_Lib_App::app()->getConfig()->get('UUIDServer');
+        $this->tcp = new Core_Helper_Net_Tcp($l5conf['host'], $l5conf['port']);
         $this->tcp->connect();
     }
 
@@ -38,7 +34,7 @@ class UUID {
      * @return int
      */
     public function get() {
-        $msg = Http::buildRequest('/', '', 'GET');
+        $msg = Core_Helper_Net_Http::buildRequest('/', '', 'GET');
         $this->tcp->send($msg);
         $body = $this->tcp->fgets(512);
         return (int)trim($body);

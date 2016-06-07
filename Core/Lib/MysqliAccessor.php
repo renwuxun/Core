@@ -6,22 +6,13 @@
  * Time: 13:34
  */
 
-namespace Core\Lib\DataAccessor;
 
-
-
-use Core\Helper\L5;
-use Core\Lib\App;
-use Core\Lib\DataAccessor;
-use Core\Lib\DataObject;
-use Core\Lib\Exception;
-
-class MysqliAccessor extends DataAccessor {
+class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
 
     const OP_LIKE = 'like';
 
     /**
-     * @var \mysqli
+     * @var mysqli
      */
     protected $conn = null;
     protected $lastSql = '';
@@ -30,7 +21,7 @@ class MysqliAccessor extends DataAccessor {
     /**
      * MysqliAccessor constructor.
      * @param string $modelName
-     * @param \mysqli $conn
+     * @param mysqli $conn
      * @throws Exception
      */
     public function __construct($modelName, $conn = null) {
@@ -41,15 +32,15 @@ class MysqliAccessor extends DataAccessor {
             return;
         }
 
-        $conf = App::app()->getConfig()->get('modelServers.'.$modelName);
+        $conf = Core_Lib_App::app()->getConfig()->get('modelServers.'.$modelName);
         if ($conf['sid'] > 0) {
-            $ipport = L5::getInstance()->route($conf['sid']);
+            $ipport = Core_Lib_L5::getInstance()->route($conf['sid']);
             if (!empty($ipport) && $ipport[1] != '0') {
                 $conf['host'] = $ipport[0];
                 $conf['port'] = $ipport[1];
             }
         }
-        $this->conn = new \mysqli($conf['host'], $conf['user'], $conf['psw'], $conf['dbname'], $conf['port']);
+        $this->conn = new mysqli($conf['host'], $conf['user'], $conf['psw'], $conf['dbname'], $conf['port']);
         if ($this->conn->connect_errno != 0) {
             throw new Exception('model server connect error: '.$this->conn->connect_error);
         }
@@ -57,7 +48,7 @@ class MysqliAccessor extends DataAccessor {
 
     public function find() {
         /**
-         * @var $modelName DataObject
+         * @var $modelName Core_Lib_DataObject
          */
         $modelName = $this->modelName;
 
@@ -100,7 +91,7 @@ class MysqliAccessor extends DataAccessor {
         }
 
         /**
-         * @var $modelName DataObject
+         * @var $modelName Core_Lib_DataObject
          */
         $modelName = $this->modelName;
 
@@ -131,7 +122,7 @@ class MysqliAccessor extends DataAccessor {
         }
 
         /**
-         * @var $modelName DataObject
+         * @var $modelName Core_Lib_DataObject
          */
         $modelName = $this->modelName;
 
@@ -156,7 +147,7 @@ class MysqliAccessor extends DataAccessor {
      */
     public function delete() {
         /**
-         * @var $modelName DataObject
+         * @var $modelName Core_Lib_DataObject
          */
         $modelName = $this->modelName;
 
@@ -181,7 +172,7 @@ class MysqliAccessor extends DataAccessor {
      */
     public function count() {
         /**
-         * @var $modelName DataObject
+         * @var $modelName Core_Lib_DataObject
          */
         $modelName = $this->modelName;
 

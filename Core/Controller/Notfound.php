@@ -6,12 +6,10 @@
  * Time: 17:54
  */
 
-namespace Core\Controller;
 
 
-use Core\Lib\Controller;
 
-class Notfound extends Controller{
+class Core_Controller_Notfound extends Core_Lib_Controller{
 
     public function indexAction() {
 

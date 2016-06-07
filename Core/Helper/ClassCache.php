@@ -6,24 +6,21 @@
  * Time: 10:56
  */
 
-namespace Core\Helper;
-
 
 
 /*
-ClassCache::run(
+Core_Helper_ClassCache::run(
     PROJECT_PATH . '/Cache/ClassesCached',
     function () {
-        App::createApp(new Config())->run();
+        Core_Lib_App::createApp(new Core_Lib_Config())->run();
     }
 );
 */
 
 /**
- * Class ClassCache
- * @package Core\Helper
+ * Class Core_Helper_ClassCache
  */
-class ClassCache {
+class Core_Helper_ClassCache {
     private static $classList = [];
     public static function run($cacheFile, $callback) {
         if (file_exists($cacheFile)) {
@@ -37,7 +34,7 @@ class ClassCache {
 
         $content = "<?php\n\n";
         foreach (self::$classList as $c) {
-            $_content=file_get_contents((new \ReflectionClass($c))->getFileName());
+            $_content=file_get_contents((new ReflectionClass($c))->getFileName());
             $pos = strpos($_content, '<?php');
             if (0 === $pos) {
                 $_content = substr($_content, 5);

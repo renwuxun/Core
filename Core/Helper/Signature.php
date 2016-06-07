@@ -6,10 +6,9 @@
  * Time: 15:00
  */
 
-namespace Core\Helper;
 
 
-class Signature {
+class Core_Helper_Signature {
     
     const SEPARATOR = '`';
 

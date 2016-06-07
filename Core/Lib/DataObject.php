@@ -6,14 +6,41 @@
  * Time: 13:26
  */
 
-namespace Core\Lib;
+
+interface IDataObject {
+    /**
+     * @return Core_Lib_DataAccessor
+     */
+    public static function dataAccessor();
+
+    /**
+     * @return string
+     */
+    public static function table();
+
+    /**
+     * @return string
+     */
+    public static function primaryField();
+
+    /**
+     * 数据分组的依据
+     * @return string
+     */
+    public static function keyField();
+
+    /**
+     * @return array
+     */
+    public static function fieldType();
+}
 
 
 
 /**
- * Class DataObject
+ * Class Core_Lib_DataObject
  */
-abstract class DataObject implements IDataObject {
+abstract class Core_Lib_DataObject implements IDataObject {
 
     const DATA_TYPE_FLOAT='float';
     const DATA_TYPE_INT='int';

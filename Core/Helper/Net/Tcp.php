@@ -1,9 +1,8 @@
 <?php
 
-namespace Core\Helper\Net;
 
 
-class Tcp {
+class Core_Helper_Net_Tcp {
 
 	protected $host;
 	protected $port;

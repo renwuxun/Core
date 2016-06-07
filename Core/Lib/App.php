@@ -6,10 +6,9 @@
  * Time: 14:52
  */
 
-namespace Core\Lib;
 
 
-class App {
+class Core_Lib_App {
 
     /**
      * @var $this
@@ -17,41 +16,41 @@ class App {
     private static $instance;
 
     /**
-     * @var Config
+     * @var Core_Lib_Config
      */
     private $config;
 
     /**
-     * @var Request
+     * @var Core_Lib_Request
      */
     private $request;
 
     /**
-     * @var IRoute
+     * @var Core_Lib_IRoute
      */
     private $route;
 
     /**
-     * @var Controller
+     * @var Core_Lib_Controller
      */
     private $controller;
 
     /**
-     * @var Response
+     * @var Core_Lib_Response
      */
     private $response;
 
     /**
      * App constructor.
-     * @param $config Config
+     * @param $config Core_Lib_Config
      */
     private function __construct($config) {
         $this->config = $config;
     }
 
     /**
-     * @param $config Config
-     * @return App $this
+     * @param $config Core_Lib_Config
+     * @return $this
      */
     public static function createApp($config) {
         if (self::$instance === null) {
@@ -78,25 +77,25 @@ class App {
     }
 
     /**
-     * @return Config
+     * @return Core_Lib_Config
      */
     public function getConfig() {
         return $this->config;
     }
 
     /**
-     * @return Request
+     * @return Core_Lib_Request
      */
     public function getRequest() {
         if (null === $this->request) {
-            $this->request = new Request;
+            $this->request = new Core_Lib_Request;
             $this->request->init($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER, $_ENV);
         }
         return $this->request;
     }
 
     /**
-     * @return IRoute
+     * @return Core_Lib_IRoute
      */
     public function getRoute() {
         if (null === $this->route) {
@@ -108,7 +107,7 @@ class App {
     }
 
     /**
-     * @return Controller
+     * @return Core_Lib_Controller
      */
     public function getController() {
         if (null === $this->controller) {
@@ -119,11 +118,11 @@ class App {
     }
 
     /**
-     * @return Response
+     * @return Core_Lib_Response
      */
     public function getResponse() {
         if (null === $this->response) {
-            $this->response = new Response;
+            $this->response = new Core_Lib_Response;
             $this->response->setHttpVersion($this->getRequest()->getHttpVersion());
         }
         return $this->response;

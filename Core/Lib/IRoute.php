@@ -6,10 +6,9 @@
  * Time: 19:18
  */
 
-namespace Core\Lib;
 
 
-interface IRoute {
+interface Core_Lib_IRoute {
     /**
      * @param $path string
      */
