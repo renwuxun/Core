@@ -1,0 +1,17 @@
+{
+    "name": "renwuxun/core",
+    "license": "proprietary",
+    "type": "project",
+    "authors": [
+        {"name":"renwuxun","email":"229602756@qq.com","homepage":"https://github.com/renwuxun","role":"developer"}
+    ],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "autoload": {
+        "psr-4": {"Core\\": "Core/"}
+    },
+    "autoload-dev": {
+        "psr-4": {"Test\\": "Test/"}
+    }
+}
