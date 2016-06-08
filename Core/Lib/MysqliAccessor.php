@@ -276,6 +276,13 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
         return $this->conn->insert_id;
     }
 
+    /**
+     * @return string
+     */
+    public function getLastSql() {
+        return $this->lastSql;
+    }
+
     protected function halt($msg) {
         throw new Exception($msg, -1);
     }
