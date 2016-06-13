@@ -188,4 +188,79 @@ class Core_Lib_Request {
     public function getHttpVersion() {
         return substr($this->SERVER['SERVER_PROTOCOL'], 5);
     }
+
+    /**
+     * @return string
+     */
+    public function getMethod() {
+        return $this->SERVER['REQUEST_METHOD'];
+    }
+
+    public function getHost(){
+        return isset($this->SERVER['HTTP_HOST']) ? $this->SERVER['HTTP_HOST'] : '';
+    }
+
+    public function getConnection(){
+        return isset($this->SERVER['HTTP_CONNECTION']) ? $this->SERVER['HTTP_CONNECTION'] : '';
+    }
+
+    public function getPragma(){
+        return isset($this->SERVER['HTTP_PRAGMA']) ? $this->SERVER['HTTP_PRAGMA'] : '';
+    }
+
+    public function getCacheControl(){
+        return isset($this->SERVER['HTTP_CACHE_CONTROL']) ? $this->SERVER['HTTP_CACHE_CONTROL'] : '';
+    }
+
+    public function getAccessControlRequestMethod(){
+        return isset($this->SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']) ? $this->SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'] : '';
+    }
+
+    public function getOrigin(){
+        return isset($this->SERVER['HTTP_ORIGIN']) ? $this->SERVER['HTTP_ORIGIN'] : '';
+    }
+
+    public function getUserAgent(){
+        return isset($this->SERVER['HTTP_USER_AGENT']) ? $this->SERVER['HTTP_USER_AGENT'] : '';
+    }
+
+    public function getAccessControlRequestHeaders(){
+        return isset($this->SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']) ? $this->SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'] : '';
+    }
+
+    public function getAccept(){
+        return isset($this->SERVER['HTTP_ACCEPT']) ? $this->SERVER['HTTP_ACCEPT'] : '';
+    }
+
+    public function getReferer(){
+        return isset($this->SERVER['HTTP_REFERER']) ? $this->SERVER['HTTP_REFERER'] : '';
+    }
+
+    public function getAcceptEncoding(){
+        return isset($this->SERVER['HTTP_ACCEPT_ENCODING']) ? $this->SERVER['HTTP_ACCEPT_ENCODING'] : '';
+    }
+
+    public function getAcceptLanguage(){
+        return isset($this->SERVER['HTTP_ACCEPT_LANGUAGE']) ? $this->SERVER['HTTP_ACCEPT_LANGUAGE'] : '';
+    }
+
+    /**
+     * @param bool $float
+     * @return int
+     */
+    public function getTime($float = false) {
+        $k = $float ? 'REQUEST_TIME_FLOAT' : 'REQUEST_TIME';
+        return isset($this->SERVER[$k]) ? (int)$this->SERVER[$k] : 0;
+    }
+
+    /**
+     * @param string $inKey eg: X-Auth-Token
+     * @return string
+     */
+    public function getHttpHeader($inKey) {
+        $inKey = strtr($inKey, '-', '_');
+        $inKey = strtoupper($inKey);
+        $inKey = 'HTTP_'.$inKey;
+        return isset($this->SERVER[$inKey]) ? $this->SERVER[$inKey] : '';
+    }
 }
