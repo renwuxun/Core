@@ -238,4 +238,15 @@ class Core_Lib_Request {
         $k = $float ? 'REQUEST_TIME_FLOAT' : 'REQUEST_TIME';
         return isset($this->SERVER[$k]) ? (int)$this->SERVER[$k] : 0;
     }
+
+    /**
+     * @param string $inKey eg: X-Auth-Token
+     * @return string
+     */
+    public function getHttpHeader($inKey) {
+        $inKey = strtr($inKey, '-', '_');
+        $inKey = strtoupper($inKey);
+        $inKey = 'HTTP_'.$inKey;
+        return isset($this->SERVER[$inKey]) ? $this->SERVER[$inKey] : '';
+    }
 }
