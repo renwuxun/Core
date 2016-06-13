@@ -18,7 +18,9 @@ class Core_Interceptor_CORS extends Core_Lib_Interceptor {
         $res = Core_Lib_App::app()->getResponse();
 
         $origin = $req->getOrigin();
-        $res->setHeader('Access-Control-Allow-Origin', $origin);
+        if ($origin) {
+            $res->setHeader('Access-Control-Allow-Origin', $origin);
+        }
         if ('OPTIONS' == $req->getMethod()) {
             $acrh = $req->getAccessControlRequestHeaders();
             $res->setHeader('Access-Control-Allow-Headers', $acrh);
