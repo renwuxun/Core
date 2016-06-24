@@ -183,6 +183,15 @@ class Core_Lib_Request {
     }
 
     /**
+     * @param string $key
+     * @param null $default
+     * @return array|$default|null
+     */
+    public function file($key, $default = null) {
+        return isset($this->FILES[$key]) ? $this->FILES[$key] : $default;
+    }
+
+    /**
      * @return string
      */
     public function getHttpVersion() {
