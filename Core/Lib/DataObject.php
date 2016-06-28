@@ -24,6 +24,7 @@ interface IDataObject {
     public static function primaryField();
 
     /**
+     * sharding key
      * 数据分组的依据
      * @return string
      */

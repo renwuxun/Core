@@ -25,7 +25,7 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
      * @throws Exception
      */
     public function __construct($modelName, $conn = null) {
-        $this->modelName = $modelName;
+        parent::__construct($modelName);
 
         if ($conn) {
             $this->conn = $conn;

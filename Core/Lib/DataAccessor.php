@@ -30,7 +30,7 @@ abstract class Core_Lib_DataAccessor {
     protected $filterKeys = array();
     protected $filterOps = array();
     protected $filterVals = array();
-    protected $key = '';
+    protected $key = ''; // sharding value
 
     protected $setFields = array();
 
@@ -46,6 +46,10 @@ abstract class Core_Lib_DataAccessor {
 
     protected $errno = 0;
     protected $errstr = '';
+
+    public function __construct($modelName) {
+        $this->modelName = $modelName;
+    }
 
     public function filter($key, $val) {
 
