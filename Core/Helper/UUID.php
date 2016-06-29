@@ -19,8 +19,8 @@ class Core_Helper_UUID {
 
     private function __construct() {
         $l5conf = Core_Lib_App::app()->getConfig()->get('UUIDServer');
-        $this->tcp = new Core_Helper_Net_Tcp($l5conf['host'], $l5conf['port']);
-        $this->tcp->connect();
+        $this->tcp = new Core_Helper_Net_Tcp;
+        $this->tcp->connect($l5conf['host'], $l5conf['port']);
     }
 
     public static function getInstance() {
