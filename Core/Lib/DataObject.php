@@ -57,6 +57,7 @@ abstract class Core_Lib_DataObject implements IDataObject {
         }
         foreach(array_keys($fieldType) as $field) {
             $this->$field = null;
+            $this->srcData[$field] = null;
         }
     }
 
