@@ -16,19 +16,12 @@ interface IDataObject {
     /**
      * @return string
      */
-    public static function table();
-
-    /**
-     * @return string
-     */
     public static function primaryField();
 
     /**
-     * sharding key
-     * 数据分组的依据
      * @return string
      */
-    public static function keyField();
+    public static function shardingField();
 
     /**
      * @return array
@@ -45,10 +38,11 @@ abstract class Core_Lib_DataObject implements IDataObject {
 
     const DATA_TYPE_FLOAT='float';
     const DATA_TYPE_INT='int';
-    const DATA_TYPE_STR='str';
-    const DATA_TYPE_BIN='bin';
+    const DATA_TYPE_STR='string';
 
     public $srcData = array();
+
+    protected $isLoaded = false;
 
     public function __construct() {
         $fieldType = static::fieldType();
@@ -76,7 +70,11 @@ abstract class Core_Lib_DataObject implements IDataObject {
         $ret = $da->insert();
         $primaryField = static::primaryField();
         $this->$primaryField || $this->$primaryField = $this->srcData[$primaryField] = $da->lastInsertId();
-        return $ret;
+        if ($ret == 1) {
+            $this->isLoaded = true;
+        }
+
+        return $ret == 1;
     }
 
     /**
@@ -91,14 +89,46 @@ abstract class Core_Lib_DataObject implements IDataObject {
             }
         }
 
-        $keyField = static::keyField();
+        $keyField = static::shardingField();
         if (null !== $this->$keyField) {
             $da->filter($keyField, $this->$keyField);
         }
 
         $primaryField = static::primaryField();
         $da->filter($primaryField, $this->$primaryField);
-        return $da->update();
+        $r = $da->update();
+        if ($r == 1) {
+            $this->isLoaded = true;
+        }
+
+        return $r == 1;
+    }
+
+    /**
+     * @return bool
+     */
+    public function delete() {
+        $da = static::dataAccessor();
+        $fieldType = static::fieldType();
+        foreach(array_keys($fieldType) as $field) {
+            if ($this->$field != $this->srcData[$field]) {
+                $da->setField($field, $this->$field);
+            }
+        }
+
+        $keyField = static::shardingField();
+        if (null !== $this->$keyField) {
+            $da->filter($keyField, $this->$keyField);
+        }
+
+        $primaryField = static::primaryField();
+        $da->filter($primaryField, $this->$primaryField);
+        $r = $da->delete();
+        if ($r == 1) {
+            $this->isLoaded = true;
+        }
+
+        return $r == 1;
     }
 
     public function toArray() {
@@ -109,17 +139,19 @@ abstract class Core_Lib_DataObject implements IDataObject {
         return $arr;
     }
 
-    protected $isLoaded = 0;
-
+    /**
+     * @return bool
+     */
     public function save() {
         if ($this->isLoaded) {
-            $this->update();
+            return $this->update();
         } else {
-            $this->insert();
+            return $this->insert();
         }
     }
 
-    public function setCreateByDataAccessor() {
-        $this->isLoaded = 1;
+    public function createByDataAccessor() {
+        $this->isLoaded = true;
     }
+
 }
