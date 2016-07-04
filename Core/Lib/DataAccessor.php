@@ -51,6 +51,17 @@ abstract class Core_Lib_DataAccessor {
         $this->modelName = $modelName;
     }
 
+    protected function resetFilter() {
+        $this->filterKeys = array();
+        $this->filterOps = array();
+        $this->filterVals = array();
+        $this->setFields = array();
+        $this->loadFields = array();
+        $this->sorts = array();
+        $this->offset = 0;
+        $this->limit = self::DEFAULT_LIMIT;
+    }
+
     public function filter($key, $val) {
 
         return $this->filterByOp($key, is_array($val) ? self::OP_IN : self::OP_EQUAL, $val);
