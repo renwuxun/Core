@@ -17,6 +17,9 @@ class Core_Helper_UUID {
 
     private static $instance;
 
+    private $errno = 0;
+    private $errstr = '';
+
     private function __construct() {
         $l5conf = Core_Lib_App::app()->getConfig()->get('UUIDServer');
         $this->tcp = new Core_Helper_Net_Tcp;
@@ -36,11 +39,26 @@ class Core_Helper_UUID {
     public function get() {
         $msg = Core_Helper_Net_Http::buildRequest('/', '', 'GET');
         $this->tcp->send($msg);
-        $body = $this->tcp->fgets(512);
+        $header = Core_Helper_Net_Http::readHeader($this->tcp);
+        $body = Core_Helper_Net_Http::readBody($this->tcp, $header, $this->errno, $this->errstr);
         return (int)trim($body);
     }
 
     public function __destruct() {
         $this->tcp->close();
+    }
+
+    /**
+     * @return int
+     */
+    public function getErrno() {
+        return $this->errno;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrstr() {
+        return $this->errstr;
     }
 }
