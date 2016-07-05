@@ -89,9 +89,9 @@ abstract class Core_Lib_DataObject implements IDataObject {
             }
         }
 
-        $keyField = static::shardingField();
-        if (null !== $this->$keyField) {
-            $da->filter($keyField, $this->$keyField);
+        $shardingField = static::shardingField();
+        if (null !== $this->$shardingField) {
+            $da->filter($shardingField, $this->$shardingField);
         }
 
         $primaryField = static::primaryField();
@@ -116,9 +116,9 @@ abstract class Core_Lib_DataObject implements IDataObject {
             }
         }
 
-        $keyField = static::shardingField();
-        if (null !== $this->$keyField) {
-            $da->filter($keyField, $this->$keyField);
+        $shardingField = static::shardingField();
+        if (null !== $this->$shardingField) {
+            $da->filter($shardingField, $this->$shardingField);
         }
 
         $primaryField = static::primaryField();
