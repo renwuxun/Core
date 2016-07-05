@@ -10,23 +10,23 @@ class Core_Lib_MysqliConn extends mysqli {
 
     use Core_Lib_Conn;
 
-    public function __construct($host = null, $port = null, $user = null, $psw = null, $dbname = null, $tbname = null) {
+    public function __construct($host = null, $user = null, $psw = null, $dbname = null, $port = null, $socket = null, $tbname = null) {
         parent::__construct($host, $user, $psw, $dbname, $port);
-        $this->_host = $host;
-        $this->_port = $port;
-        $this->_user = $user;
-        $this->_psw = $psw;
-        $this->_dbname = $dbname;
-        $this->_tbname = $tbname;
+        $host!=null && $this->_host = $host;
+        $port!=null && $this->_port = $port;
+        $user!=null && $this->_user = $user;
+        $psw!=null && $this->_psw = $psw;
+        $dbname!=null && $this->_dbname = $dbname;
+        $tbname!=null && $this->_tbname = $tbname;
     }
 
-    public function connect($host, $port, $user, $psw, $dbname, $tbname) {
+    public function connect($host = null, $user = null, $psw = null, $dbname = null, $port = null, $socket = null, $tbname = null) {
         parent::connect($host, $user, $psw, $dbname, $port);
-        $this->_host = $host;
-        $this->_port = $port;
-        $this->_user = $user;
-        $this->_psw = $psw;
-        $this->_dbname = $dbname;
-        $this->_tbname = $tbname;
+        $host!=null && $this->_host = $host;
+        $port!=null && $this->_port = $port;
+        $user!=null && $this->_user = $user;
+        $psw!=null && $this->_psw = $psw;
+        $dbname!=null && $this->_dbname = $dbname;
+        $tbname!=null && $this->_tbname = $tbname;
     }
 }
