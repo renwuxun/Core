@@ -6,7 +6,7 @@
  * Date: 2016/7/4 0004
  * Time: 23:25
  */
-abstract class Core_Lib_MysqliConn extends mysqli {
+class Core_Lib_MysqliConn extends mysqli {
 
     use Core_Lib_Conn;
 
