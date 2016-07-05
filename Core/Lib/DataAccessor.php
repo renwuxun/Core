@@ -47,7 +47,7 @@ abstract class Core_Lib_DataAccessor {
     protected $errstr = '';
 
     /**
-     * @var Core_Lib_MysqlConn
+     * @var Core_Lib_MysqliConn
      */
     protected $conn;
 
