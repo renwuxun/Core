@@ -130,10 +130,10 @@ abstract class Core_Lib_DataAccessor {
 
     /**
      * @param $key
-     * @param int $type
+     * @param string $type
      * @return $this
      */
-    public function sort($key, $type = SORT_DESC) {
+    public function sort($key, $type = self::SORT_TYPE_DESC) {
         $this->sorts[$key] = $type;
         return $this;
     }

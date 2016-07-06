@@ -218,6 +218,9 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
             }
             $orderBy = rtrim($orderBy, ',');
         }
+        if ($orderBy!='') {
+            $orderBy = 'ORDER BY '.$orderBy;
+        }
         $this->sorts = array();//reset
         return $orderBy;
     }
