@@ -11,7 +11,7 @@ class Core_Lib_MysqliConn extends mysqli {
     use Core_Lib_Conn;
 
     public function __construct($host = null, $user = null, $psw = null, $dbname = null, $port = null, $socket = null, $tbname = null) {
-        parent::__construct($host, $user, $psw, $dbname, $port);
+        parent::__construct($host, $user, $psw, $dbname, $port, $socket);
         $host!=null && $this->_host = $host;
         $port!=null && $this->_port = $port;
         $user!=null && $this->_user = $user;
@@ -21,7 +21,7 @@ class Core_Lib_MysqliConn extends mysqli {
     }
 
     public function connect($host = null, $user = null, $psw = null, $dbname = null, $port = null, $socket = null, $tbname = null) {
-        parent::connect($host, $user, $psw, $dbname, $port);
+        parent::connect($host, $user, $psw, $dbname, $port, $socket);
         $host!=null && $this->_host = $host;
         $port!=null && $this->_port = $port;
         $user!=null && $this->_user = $user;
