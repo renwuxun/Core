@@ -28,7 +28,7 @@ abstract class Core_Lib_Model extends Core_Lib_DataObject {
         }
     }
 
-    public static function getConn() {
+    protected static function getConn() {
         static $conn;
         if (null === $conn) {
             $conf = Core_Lib_App::app()->getConfig()->get('modelServers.'.get_called_class());
