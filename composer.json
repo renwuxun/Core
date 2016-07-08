@@ -1,7 +1,7 @@
 {
     "name": "renwuxun/core",
     "license": "proprietary",
-    "type": "project",
+    "type": "library",
     "authors": [
         {"name":"renwuxun","email":"229602756@qq.com","homepage":"https://github.com/renwuxun","role":"developer"}
     ],
