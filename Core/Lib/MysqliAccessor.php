@@ -14,14 +14,14 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
     protected $lastSql = '';
 
     public function find() {
-        /**
-         * @var $modelName Core_Lib_DataObject
-         */
-        $modelName = $this->modelName;
-
-        if ($this->shardingValue == '') {
-            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
-        }
+//        /**
+//         * @var $modelName Core_Lib_DataObject
+//         */
+//        $modelName = $this->modelName;
+//
+//        if ($this->shardingValue == '') {
+//            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
+//        }
 
         $fields = $this->prepareFields();
         $where = $this->prepareWhere();
@@ -57,14 +57,14 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
             return false;
         }
 
-        /**
-         * @var $modelName Core_Lib_DataObject
-         */
-        $modelName = $this->modelName;
-
-        if($this->shardingValue == ''){
-            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
-        }
+//        /**
+//         * @var $modelName Core_Lib_DataObject
+//         */
+//        $modelName = $this->modelName;
+//
+//        if($this->shardingValue == ''){
+//            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
+//        }
 
         $setData = $this->prepareSetdata();
         $where = $this->prepareWhere();
@@ -88,14 +88,14 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
             return -1;
         }
 
-        /**
-         * @var $modelName Core_Lib_DataObject
-         */
-        $modelName = $this->modelName;
-
-        if($this->shardingValue == ''){
-            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
-        }
+//        /**
+//         * @var $modelName Core_Lib_DataObject
+//         */
+//        $modelName = $this->modelName;
+//
+//        if($this->shardingValue == ''){
+//            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
+//        }
 
         $ignore = $ignore ? 'IGNORE' : '';
 
@@ -113,14 +113,14 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
      * @throws Exception
      */
     public function delete() {
-        /**
-         * @var $modelName Core_Lib_DataObject
-         */
-        $modelName = $this->modelName;
-
-        if($this->shardingValue == ''){
-            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
-        }
+//        /**
+//         * @var $modelName Core_Lib_DataObject
+//         */
+//        $modelName = $this->modelName;
+//
+//        if($this->shardingValue == ''){
+//            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
+//        }
 
         $where = $this->prepareWhere();
         $limit = $this->prepareLimit();
@@ -138,14 +138,14 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
      * @throws Exception
      */
     public function count() {
-        /**
-         * @var $modelName Core_Lib_DataObject
-         */
-        $modelName = $this->modelName;
-
-        if($this->shardingValue == ''){
-            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
-        }
+//        /**
+//         * @var $modelName Core_Lib_DataObject
+//         */
+//        $modelName = $this->modelName;
+//
+//        if($this->shardingValue == ''){
+//            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
+//        }
 
         $fields = 'count(*) as cnt';
 
