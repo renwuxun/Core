@@ -25,6 +25,11 @@ abstract class Core_Lib_Controller {
     private $view;
 
     /**
+     * @var []
+     */
+    private $outerActions;
+
+    /**
      * @return array
      */
     protected static function selfInterceptors() {
@@ -55,6 +60,10 @@ abstract class Core_Lib_Controller {
         return $this->interceptors;
     }
 
+    public function setOuterAction($sAction, $sActionClass) {
+        $this->outerActions[$sAction] = $sActionClass;
+    }
+
     /**
      * @param string $sAction
      * @param array $args
@@ -75,7 +84,15 @@ abstract class Core_Lib_Controller {
         }
         $content = '';
         if (!$skipLogic) {
-            $content = call_user_func_array(array($this, $sAction.'Action'), $args);
+            if (isset($this->outerActions[$sAction])) {
+                /**
+                 * @var Core_Lib_Action $actionObj
+                 */
+                $actionObj = new $this->outerActions[$sAction];
+                $content = call_user_func_array(array($actionObj, 'run'), $args);
+            } else {
+                $content = call_user_func_array(array($this, $sAction.'Action'), $args);
+            }
             $layout = $this->getLayout();
             if (null !== $layout) {
                 $layout->assign('content', $content);
