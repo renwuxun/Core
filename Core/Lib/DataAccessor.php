@@ -10,11 +10,6 @@
 
 abstract class Core_Lib_DataAccessor {
 
-    /**
-     * @var static[]
-     */
-    protected static $instances;
-
     const OP_GREATER_THAN = '>';
     const OP_GREATER_THAN_OR_EQUAL_TO = '>=';
     const OP_LESS_THAN = '<';
@@ -47,7 +42,7 @@ abstract class Core_Lib_DataAccessor {
     protected $errstr = '';
 
     /**
-     * @var Core_Lib_MysqliConn
+     * @var Core_Lib_Conn
      */
     protected $conn;
 

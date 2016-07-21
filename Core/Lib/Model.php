@@ -28,6 +28,11 @@ abstract class Core_Lib_Model extends Core_Lib_DataObject {
         }
     }
 
+    /**
+     * @deprecated 0.3.0
+     * @return Core_Lib_Conn
+     * @throws Exception
+     */
     protected static function getConn() {
         static $conn;
         if (null === $conn) {
