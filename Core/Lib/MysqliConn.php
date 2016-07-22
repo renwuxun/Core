@@ -18,6 +18,7 @@ class Core_Lib_MysqliConn extends mysqli {
         $psw!=null && $this->_psw = $psw;
         $dbname!=null && $this->_dbname = $dbname;
         $tbname!=null && $this->_tbname = $tbname;
+        $socket!=null && $this->_socket = $socket;
     }
 
     public function connect($host = null, $user = null, $psw = null, $dbname = null, $port = null, $socket = null, $tbname = null) {
@@ -28,5 +29,6 @@ class Core_Lib_MysqliConn extends mysqli {
         $psw!=null && $this->_psw = $psw;
         $dbname!=null && $this->_dbname = $dbname;
         $tbname!=null && $this->_tbname = $tbname;
+        $socket!=null && $this->_socket = $socket;
     }
 }

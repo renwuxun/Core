@@ -34,6 +34,11 @@ trait Core_Lib_Conn {
     protected $_tbname;
 
     /**
+     * @var string unix domain socket
+     */
+    protected $_socket;
+
+    /**
      * @return string
      */
     public function getHost() {
@@ -75,4 +80,10 @@ trait Core_Lib_Conn {
         return $this->_tbname;
     }
 
+    /**
+     * @return string
+     */
+    public function getSocket() {
+        return $this->_socket;
+    }
 }
