@@ -22,7 +22,12 @@ class Core_Helper_Net_Tcp {
          * 请使用stream_set_timeout()，
          * fsockopen()的连接时限（timeout）的参数仅仅在套接字连接的时候生效。
          */
-        $this->fp = fsockopen($host, $port, $this->errno, $this->errstr, $timeoutsec);
+        $this->fp = @fsockopen($host, $port, $this->errno, $this->errstr, $timeoutsec);
+        $errData = error_get_last();
+        if ($errData){
+            $this->errno = $errData['type'];
+            $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
+        }
         return is_resource($this->fp);
     }
 
@@ -36,7 +41,16 @@ class Core_Helper_Net_Tcp {
         $length = strlen($msg);
         $wrote = 0;
         while($wrote<$length) {
-            stream_set_timeout($this->fp, $timeoutsec);
+            if (!@stream_set_timeout($this->fp, $timeoutsec)) {
+                $errData = error_get_last();
+                if ($this->errno == 0) {
+                    $this->errno = $errData['type'];
+                }
+                if ($this->errstr == '') {
+                    $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
+                }
+                break;
+            }
             $wrote += fwrite($this->fp, $msg, $length-$wrote);
             $info = stream_get_meta_data($this->fp);
             if ($info['timed_out']) {
@@ -56,7 +70,16 @@ class Core_Helper_Net_Tcp {
         $got = 0;
         $str = '';
         while($got < $length) {
-            stream_set_timeout($this->fp, $timeoutsec);
+            if (!@stream_set_timeout($this->fp, $timeoutsec)) {
+                $errData = error_get_last();
+                if ($this->errno == 0) {
+                    $this->errno = $errData['type'];
+                }
+                if ($this->errstr == '') {
+                    $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
+                }
+                break;
+            }
             $tmp = fread($this->fp, $length - $got);
             $info = stream_get_meta_data($this->fp);
             if ($info['timed_out']) {
@@ -70,12 +93,24 @@ class Core_Helper_Net_Tcp {
             }
             $str .= $tmp;
             $got += strlen($tmp);
+            if ($info['eof']) {
+                break;
+            }
         }
         return $str;
     }
 
     public function fgets($length = null, $timeoutsec = 2) {
-        stream_set_timeout($this->fp, $timeoutsec);
+        if (!@stream_set_timeout($this->fp, $timeoutsec)) {
+            $errData = error_get_last();
+            if ($this->errno == 0) {
+                $this->errno = $errData['type'];
+            }
+            if ($this->errstr == '') {
+                $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
+            }
+            return '';
+        }
         $str = fgets($this->fp, $length);
         $info = stream_get_meta_data($this->fp);
         if ($info['timed_out']) {
