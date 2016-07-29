@@ -45,12 +45,19 @@ abstract class Core_Interceptor_Permission extends Core_Lib_Interceptor implemen
             $path .= '/'.array_shift($slice);
         }
 
-        $pathMapGroups = static::pathGroupsMapping();
-        if (!isset($pathMapGroups[$path])) {
+        $foundNeedGroups = false;
+        $needGroups = [];
+        foreach (static::pathGroupsMapping() as $k=>$v) {
+            if ('/'.trim($k, '/') == $path) {
+                $foundNeedGroups = true;
+                $needGroups = $v;
+                break;
+            }
+        }
+        if (!$foundNeedGroups) {
             return false;
         }
 
-        $needGroups = $pathMapGroups[$path];
         if (empty($needGroups)) {
             return true;
         }
