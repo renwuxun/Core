@@ -3,16 +3,19 @@
 
 interface Core_Interceptor_IPermission {
     /**
+     * 告诉Core框架当用户访问了一个没有访问权限的Action时调用的Action类
      * @return string
      */
     static function getNoPermissionAction();
 
     /**
+     * 告诉Core框架当前在线用户的用户组数组，如:['admin','xxx',...]
      * @return string[]
      */
     static function getOnlineUserGroups();
 
     /**
+     * 告诉Core系统，什么/controller/action只能那些组访问[组为空表示不限制访问]
      * @return array
      */
     static function pathGroupsMapping();
