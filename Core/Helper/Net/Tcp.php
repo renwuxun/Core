@@ -23,11 +23,6 @@ class Core_Helper_Net_Tcp {
          * fsockopen()的连接时限（timeout）的参数仅仅在套接字连接的时候生效。
          */
         $this->fp = @fsockopen($host, $port, $this->errno, $this->errstr, $timeoutsec);
-        $errData = error_get_last();
-        if ($errData){
-            $this->errno = $errData['type'];
-            $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
-        }
         return is_resource($this->fp);
     }
 
