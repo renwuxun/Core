@@ -20,10 +20,12 @@ class Core_Helper_UUID {
     private $errno = 0;
     private $errstr = '';
 
+    private $serverDown = false;
+
     private function __construct() {
         $l5conf = Core_Lib_App::app()->getConfig()->get('UUIDServer');
         $this->tcp = new Core_Helper_Net_Tcp;
-        $this->tcp->connect($l5conf['host'], $l5conf['port']);
+        $this->serverDown = !$this->tcp->connect($l5conf['host'], $l5conf['port']);
     }
 
     public static function getInstance() {
@@ -37,6 +39,13 @@ class Core_Helper_UUID {
      * @return int
      */
     public function get() {
+        if ($this->serverDown) {
+            list($usec, $sec) = explode(" ", microtime());
+            $time_ms = $sec*1000 + $usec/1000;
+            $count = rand(0, 16383);
+            $gpid = 0;// php生产的uuid特有的标记
+            return $time_ms<<22 | $count<<9 | $gpid;
+        }
         $msg = Core_Helper_Net_Http::buildRequest('/', '', 'GET');
         $this->tcp->send($msg);
         $header = Core_Helper_Net_Http::readHeader($this->tcp);
