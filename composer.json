@@ -1,6 +1,6 @@
 {
     "name": "renwuxun/core",
-    "license": "proprietary",
+    "license": "MIT",
     "type": "library",
     "authors": [
         {"name":"renwuxun","email":"229602756@qq.com","homepage":"https://github.com/renwuxun","role":"developer"}
