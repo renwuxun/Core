@@ -88,7 +88,7 @@ abstract class Core_Lib_Controller {
                 /**
                  * @var Core_Lib_Action $actionObj
                  */
-                $actionObj = new $this->outerActions[$sAction]($this);
+                $actionObj = new $this->outerActions[$sAction];
                 $content = call_user_func_array(array($actionObj, 'run'), $args);
             } else {
                 $content = call_user_func_array(array($this, $sAction.'Action'), $args);
