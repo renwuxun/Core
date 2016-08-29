@@ -272,4 +272,15 @@ class Core_Lib_Request {
         $inKey = 'HTTP_'.$inKey;
         return isset($this->SERVER[$inKey]) ? $this->SERVER[$inKey] : '';
     }
+
+    /**
+     * @return string http|https
+     */
+    public function getScheme() {
+        $scheme = 'http';
+        if(isset($this->SERVER['HTTPS']) && $this->SERVER['HTTPS'] == "on") {
+            $scheme = 'https';
+        }
+        return $scheme;
+    }
 }
