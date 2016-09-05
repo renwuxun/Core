@@ -47,6 +47,7 @@ class Core_Helper_Net_Tcp {
                 break;
             }
             $wrote += fwrite($this->fp, $msg, $length-$wrote);
+            $msg = substr($msg, $wrote);
             $info = stream_get_meta_data($this->fp);
             if ($info['timed_out']) {
                 if ($this->errno == 0) {
