@@ -176,7 +176,8 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
     }
 
     protected function prepareFields() {
-        $fields = '*';
+        $modelName = $this->modelName;
+        $fields = implode(',',array_map(function($v){return "`$v`";},array_keys($modelName::fieldType())));
         if (!empty($this->loadFields)) {
             $fields = '`' . implode('`,`', $this->loadFields) . '`';
         }
