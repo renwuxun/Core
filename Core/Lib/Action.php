@@ -8,5 +8,8 @@
  */
 abstract class Core_Lib_Action {
 
+    /**
+     * @return string
+     */
     abstract public function run();
 }
