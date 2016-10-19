@@ -10,7 +10,7 @@
 
 
 if (!isset($argv[2]) || !file_exists($argv[2])) {
-    echo "usage: php {$argv[0]} {modelname} {ddl-file-name} [>>output-file]\n";
+    echo "usage: {$argv[0]} {modelname} {ddl-file-name}\n";
     die();
 }
 
@@ -126,23 +126,23 @@ echo "        ];
 echo "\n\n";
 
 echo "    public static function primaryField() {
-        return self::FN_;
+        return self::FN_; // @FIXME
     }\n\n";
 echo "    public static function shardingField() {
-        return self::FN_;
+        return self::FN_; // @FIXME
     }\n\n";
 
 echo "    //'modelServers' => [
-    //  '$modelName' => [
-    //  'sid'=>0,
-    //  'host'=>'',
-    //  'port'=>3306,
-    //  'user'=>'',
-    //  'psw'=>'',
-    //  'dbname'=>'',
-    //  'tbname'=>'',
-    //  'charset'=>'utf8'
-    //  ]
+    //    '$modelName' => [
+    //        'sid'=>0,
+    //        'host'=>'',
+    //        'port'=>3306,
+    //        'user'=>'',
+    //        'psw'=>'',
+    //        'dbname'=>'',
+    //        'tbname'=>'',
+    //        'charset'=>'utf8'
+    //    ]
     //]\n";
 
 echo '    /**
