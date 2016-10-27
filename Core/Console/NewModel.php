@@ -119,7 +119,7 @@ echo "\n";
 echo "    public static function fieldType() {
         return [\n";
 foreach ($fields as $k=>$field) {
-    echo "            self::FN_".mb_strtoupper($field)." => '{$types[$k]}',\n";
+    echo "            self::FN_".mb_strtoupper($field)." => {$types[$k]},\n";
 }
 echo "        ];
     }\n";
