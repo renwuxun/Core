@@ -46,7 +46,13 @@ class Core_Helper_Net_Tcp {
                 }
                 break;
             }
-            $wrote += fwrite($this->fp, $msg, $length-$wrote);
+            $_wrote = fwrite($this->fp, $msg, $length-$wrote);
+            if (false === $_wrote) {
+                $this->errno = -1;
+                $this->errstr = "false === fwrite()";
+                break;
+            }
+            $wrote += $_wrote;
             $msg = substr($msg, $wrote);
             $info = stream_get_meta_data($this->fp);
             if ($info['timed_out']) {
@@ -77,6 +83,15 @@ class Core_Helper_Net_Tcp {
                 break;
             }
             $tmp = fread($this->fp, $length - $got);
+            if (false === $tmp) {
+                $this->errno = -1;
+                if (feof($this->fp)) {
+                    $this->errstr = 'feof connection';
+                } else {
+                    $this->errstr = 'false === fread()';
+                }
+                break;
+            }
             $info = stream_get_meta_data($this->fp);
             if ($info['timed_out']) {
                 if ($this->errno == 0) {
@@ -108,6 +123,10 @@ class Core_Helper_Net_Tcp {
             return '';
         }
         $str = fgets($this->fp, $length);
+        if (false === $str) {
+            $this->errno = -1;
+            $this->errstr = 'false === fgets()';
+        }
         $info = stream_get_meta_data($this->fp);
         if ($info['timed_out']) {
             if ($this->errno == 0) {

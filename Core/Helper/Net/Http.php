@@ -17,6 +17,9 @@ class Core_Helper_Net_Http {
 		$header = '';
 		while(1) {
 			$line = $tcp->fgets(self::MAX_LINE_SIZE, $timeoutsec);
+            if (false === $line) {
+                break;
+            }
 			$header .= $line;
 			if ($line=="\r\n") {
 				break;
@@ -47,11 +50,27 @@ class Core_Helper_Net_Http {
 			}
 		}elseif(preg_match('/Transfer-Encoding:\s*chunked/is', $header)) {
 			while(1) {
-				$_chunk_size = intval(hexdec($tcp->fgets(self::MAX_LINE_SIZE, $timeoutsec)));
+                $line = $tcp->fgets(self::MAX_LINE_SIZE, $timeoutsec);
+                if ($tcp->getErrno() != 0) {
+                    $errno = $tcp->getErrno();
+                    $errstr = $tcp->getErrstr();
+                    break;
+                }
+				$_chunk_size = intval(hexdec($line));
 				if ($_chunk_size>0) {
 					$body .= $tcp->recv($_chunk_size, $timeoutsec);
+                    if ($tcp->getErrno() != 0) {
+                        $errno = $tcp->getErrno();
+                        $errstr = $tcp->getErrstr();
+                        break;
+                    }
 				}
 				$tcp->recv(2, $timeoutsec);//skip \r\n
+                if ($tcp->getErrno() != 0) {
+                    $errno = $tcp->getErrno();
+                    $errstr = $tcp->getErrstr();
+                    break;
+                }
 				if ($_chunk_size<1) {
 					break;
 				}
