@@ -10,6 +10,9 @@ class Core_Helper_Net_Tcp {
     protected $errstr = '';
 
     public function connect($host, $port, $timeoutsec = 2, $fp = null) {
+        $this->errno = 0;
+        $this->errstr = '';
+
         if ($fp && is_resource($fp)) {
             $this->fp = $fp;
             return true;
@@ -37,6 +40,9 @@ class Core_Helper_Net_Tcp {
     }
 
     public function send($msg, $timeoutsec = 2) {
+        $this->errno = 0;
+        $this->errstr = '';
+
         $length = strlen($msg);
         $wrote = 0;
 
@@ -62,6 +68,9 @@ class Core_Helper_Net_Tcp {
     }
 
     public function recv($length, $timeoutsec = 2) {
+        $this->errno = 0;
+        $this->errstr = '';
+
         $got = 0;
         $str = '';
 
@@ -90,6 +99,9 @@ class Core_Helper_Net_Tcp {
     }
 
     public function fgets($length = null, $timeoutsec = 2) {
+        $this->errno = 0;
+        $this->errstr = '';
+
         if (!@stream_set_timeout($this->fp, $timeoutsec)) {
             $errData = error_get_last();
             $this->errno = $errData['type'];
