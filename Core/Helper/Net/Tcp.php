@@ -23,6 +23,10 @@ class Core_Helper_Net_Tcp {
          * fsockopen()的连接时限（timeout）的参数仅仅在套接字连接的时候生效。
          */
         $this->fp = @fsockopen($host, $port, $this->errno, $this->errstr, $timeoutsec);
+        if (false === $this->fp && 0 == $this->errno) {
+            $this->errno = 10;
+            $this->errstr = 'error before connect()';
+        }
         return is_resource($this->fp);
     }
 
@@ -35,75 +39,49 @@ class Core_Helper_Net_Tcp {
     public function send($msg, $timeoutsec = 2) {
         $length = strlen($msg);
         $wrote = 0;
-        while($wrote<$length) {
-            if (!@stream_set_timeout($this->fp, $timeoutsec)) {
-                $errData = error_get_last();
-                if ($this->errno == 0) {
-                    $this->errno = $errData['type'];
-                }
-                if ($this->errstr == '') {
-                    $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
-                }
-                break;
-            }
-            $_wrote = fwrite($this->fp, $msg, $length-$wrote);
-            if (false === $_wrote) {
-                $this->errno = -1;
-                $this->errstr = "false === fwrite()";
-                break;
-            }
-            $wrote += $_wrote;
+
+        if (!@stream_set_timeout($this->fp, $timeoutsec)) {
+            $errData = error_get_last();
+            $this->errno = $errData['type'];
+            $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
+            return $wrote;
+        }
+
+        while ($wrote<$length) {
+            $wrote += fwrite($this->fp, $msg, $length-$wrote);
             $msg = substr($msg, $wrote);
             $info = stream_get_meta_data($this->fp);
             if ($info['timed_out']) {
-                if ($this->errno == 0) {
-                    $this->errno = -1;
-                }
-                if ($this->errstr == '') {
-                    $this->errstr = 'connection send timeout';
-                }
+                $this->errno = 20;
+                $this->errstr = 'tcp send timeout';
                 break;
             }
         }
+
         return $wrote;
     }
 
     public function recv($length, $timeoutsec = 2) {
         $got = 0;
         $str = '';
+
+        if (!@stream_set_timeout($this->fp, $timeoutsec)) {
+            $errData = error_get_last();
+            $this->errno = $errData['type'];
+            $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
+            return $str;
+        }
+
         while($got < $length) {
-            if (!@stream_set_timeout($this->fp, $timeoutsec)) {
-                $errData = error_get_last();
-                if ($this->errno == 0) {
-                    $this->errno = $errData['type'];
-                }
-                if ($this->errstr == '') {
-                    $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
-                }
-                break;
-            }
             $tmp = fread($this->fp, $length - $got);
-            if (false === $tmp) {
-                $this->errno = -1;
-                if (feof($this->fp)) {
-                    $this->errstr = 'feof connection';
-                } else {
-                    $this->errstr = 'false === fread()';
-                }
-                break;
-            }
-            $info = stream_get_meta_data($this->fp);
-            if ($info['timed_out']) {
-                if ($this->errno == 0) {
-                    $this->errno = -1;
-                }
-                if ($this->errstr == '') {
-                    $this->errstr = 'connection recv timeout';
-                }
-                break;
-            }
             $str .= $tmp;
             $got += strlen($tmp);
+            $info = stream_get_meta_data($this->fp);
+            if ($info['timed_out']) {
+                $this->errno = 30;
+                $this->errstr = 'connection recv timeout';
+                break;
+            }
             if ($info['eof']) {
                 break;
             }
@@ -114,29 +92,24 @@ class Core_Helper_Net_Tcp {
     public function fgets($length = null, $timeoutsec = 2) {
         if (!@stream_set_timeout($this->fp, $timeoutsec)) {
             $errData = error_get_last();
-            if ($this->errno == 0) {
-                $this->errno = $errData['type'];
-            }
-            if ($this->errstr == '') {
-                $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
-            }
+            $this->errno = $errData['type'];
+            $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
             return '';
         }
+
         $str = fgets($this->fp, $length);
-        if (false === $str) {
-            $this->errno = -1;
-            $this->errstr = 'false === fgets()';
-        }
         $info = stream_get_meta_data($this->fp);
+
         if ($info['timed_out']) {
-            if ($this->errno == 0) {
-                $this->errno = -1;
-            }
-            if ($this->errstr == '') {
-                $this->errstr = 'connection recv[fgets] timeout';
-            }
+            $this->errno = 40;
+            $this->errstr = 'connection recv[fgets] timeout';
         }
+
         return $str;
+    }
+
+    public function feof() {
+        return feof($this->fp);
     }
 
     /**

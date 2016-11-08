@@ -48,30 +48,25 @@ class Core_Helper_Net_Udp {
     public function send($msg) {
         $length = strlen($msg);
         $wrote = 0;
-        while($wrote<$length) {
-            if (!@stream_set_timeout($this->fp, $this->iTimeout)) {
-                $errData = error_get_last();
-                if ($this->iLastErrNo == 0) {
-                    $this->iLastErrNo = $errData['type'];
-                }
-                if ($this->strLastErr == '') {
-                    $this->strLastErr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
-                }
-                break;
-            }
+
+        if (!@stream_set_timeout($this->fp, $this->iTimeout)) {
+            $errData = error_get_last();
+            $this->iLastErrNo = $errData['type'];
+            $this->strLastErr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
+            return $wrote;
+        }
+
+        while ($wrote<$length) {
             $wrote += fwrite($this->fp, $msg, $length-$wrote);
             $msg = substr($msg, $wrote);
             $info = stream_get_meta_data($this->fp);
             if ($info['timed_out']) {
-                if ($this->iLastErrNo == 0) {
-                    $this->iLastErrNo = -1;
-                }
-                if ($this->strLastErr == '') {
-                    $this->strLastErr = 'udp send timeout';
-                }
+                $this->iLastErrNo = 20;
+                $this->strLastErr = 'udp send timeout';
                 break;
             }
         }
+
         return $wrote;
     }
 
