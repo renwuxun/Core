@@ -15,7 +15,8 @@ class Core_Helper_Net_Http {
      */
     public static function readHeader($tcp, $timeoutsec = 2) {
         $header = '';
-        while(!$tcp->feof()) {
+
+        do {
             $line = $tcp->fgets(self::MAX_LINE_SIZE, $timeoutsec);
             $header .= $line;
             if ($line == "\r\n") {
@@ -24,7 +25,7 @@ class Core_Helper_Net_Http {
             if ($tcp->getErrno() != 0) {
                 break;
             }
-        }
+        } while (!$tcp->feof());
 
         return $header;
     }
@@ -45,7 +46,7 @@ class Core_Helper_Net_Http {
             $errno = $tcp->getErrno();
             $errstr = $tcp->getErrstr();
         }elseif(preg_match('/Transfer-Encoding:\s*chunked/is', $header)) {
-            while (!$tcp->feof()) {
+            do {
                 $_chunk_size = intval(hexdec($tcp->fgets(self::MAX_LINE_SIZE, $timeoutsec)));
                 if ($tcp->getErrno() != 0) {
                     break;
@@ -63,12 +64,12 @@ class Core_Helper_Net_Http {
                 if ($_chunk_size < 1) {
                     break;
                 }
-            }
+            } while (!$tcp->feof());
             $errno = $tcp->getErrno();
             $errstr = $tcp->getErrstr();
         }else{
             $errno = 10;
-            $errstr = 'unkown http body';
+            $errstr = 'unkown http body, header=['.$header.']';
         }
 
         if (self::ifServerClosed($header)) {

@@ -51,15 +51,9 @@ class Core_Helper_Net_Tcp {
         $this->errno = 0;
         $this->errstr = '';
 
-        if (!is_resource($this->fp)) {
+        if (!is_resource($this->fp)) { // 上层协议中，可能：在上次的响应中包含了关闭标志，且在读取该响应后实施了关闭
             $this->errno = 60;
             $this->errstr = 'connection is close[send]';
-            return 0;
-        }
-
-        if (@feof($this->fp)) {
-            $this->errno = 50;
-            $this->errstr = 'end of fp[send]';
             return 0;
         }
 
@@ -73,7 +67,7 @@ class Core_Helper_Net_Tcp {
             return $wrote;
         }
 
-        while ($wrote<$length) {
+        do {
             $_wrote = @fwrite($this->fp, $msg, $length-$wrote);
             $wrote += $_wrote;
             $msg = substr($msg, $wrote);
@@ -89,7 +83,7 @@ class Core_Helper_Net_Tcp {
                 $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
                 break;
             }
-        }
+        } while ($wrote<$length);
 
         return $wrote;
     }
@@ -120,7 +114,7 @@ class Core_Helper_Net_Tcp {
             return $str;
         }
 
-        while ($got < $length) {
+        do {
             $tmp = @fread($this->fp, $length - $got);
             $str .= $tmp;
             $got += strlen($tmp);
@@ -139,7 +133,7 @@ class Core_Helper_Net_Tcp {
                 $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
                 break;
             }
-        }
+        } while ($got < $length);
         return $str;
     }
 
