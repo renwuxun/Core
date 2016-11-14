@@ -108,6 +108,9 @@ class Core_Helper_Net_Http {
         $tcp->send($msg, $timeoutsec);
         $header = self::readHeader($tcp, $timeoutsec);
         $body = self::readBody($tcp, $header, $errno, $errstr, $timeoutsec);
+        if (self::ifServerClosed($header)) {
+            $tcp->close();
+        }
         return $body;
     }
 
