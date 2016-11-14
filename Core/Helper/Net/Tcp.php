@@ -43,6 +43,12 @@ class Core_Helper_Net_Tcp {
         $this->errno = 0;
         $this->errstr = '';
 
+        if (@feof($this->fp)) {
+            $this->errno = 50;
+            $this->errstr = 'end of fp[send]';
+            return 0;
+        }
+
         $length = strlen($msg);
         $wrote = 0;
 
@@ -77,6 +83,12 @@ class Core_Helper_Net_Tcp {
     public function recv($length, $timeoutsec = 2) {
         $this->errno = 0;
         $this->errstr = '';
+
+        if (@feof($this->fp)) {
+            $this->errno = 50;
+            $this->errstr = 'end of fp[recv]';
+            return '';
+        }
 
         $got = 0;
         $str = '';
@@ -114,6 +126,12 @@ class Core_Helper_Net_Tcp {
     public function fgets($length = null, $timeoutsec = 2) {
         $this->errno = 0;
         $this->errstr = '';
+
+        if (@feof($this->fp)) {
+            $this->errno = 50;
+            $this->errstr = 'end of fp[fgets]';
+            return '';
+        }
 
         if (!@stream_set_timeout($this->fp, $timeoutsec)) {
             $errData = error_get_last();
