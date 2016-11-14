@@ -110,8 +110,23 @@ class Core_Helper_Net_Http {
     public static function request($tcp, $uri, $data, &$errno, &$errstr, $method='', $headers=array(), $timeoutsec=2) {
         $msg = self::buildRequest($uri, $data, $method, $headers);
         $tcp->send($msg, $timeoutsec);
+        if ($tcp->getErrno() != 0) {
+            $errno = $tcp->getErrno();
+            $errstr = $tcp->getErrstr();
+            return '';
+        }
         $header = self::readHeader($tcp, $timeoutsec);
+        if ($tcp->getErrno() != 0) {
+            $errno = $tcp->getErrno();
+            $errstr = $tcp->getErrstr();
+            return $header;
+        }
         $body = self::readBody($tcp, $header, $errno, $errstr, $timeoutsec);
+        if ($tcp->getErrno() != 0) {
+            $errno = $tcp->getErrno();
+            $errstr = $tcp->getErrstr();
+            return $header.$body;
+        }
         return $body;
     }
 

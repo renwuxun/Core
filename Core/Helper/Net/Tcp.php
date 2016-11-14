@@ -33,6 +33,14 @@ class Core_Helper_Net_Tcp {
         return is_resource($this->fp);
     }
 
+    /**
+     * 已主动关闭|从未连接
+     * @return bool
+     */
+    public function isClose() {
+        return !is_resource($this->fp);
+    }
+
     public function close() {
         if (is_resource($this->fp)) {
             fclose($this->fp);
@@ -42,6 +50,12 @@ class Core_Helper_Net_Tcp {
     public function send($msg, $timeoutsec = 2) {
         $this->errno = 0;
         $this->errstr = '';
+
+        if (!is_resource($this->fp)) {
+            $this->errno = 60;
+            $this->errstr = 'connection is close[send]';
+            return 0;
+        }
 
         if (@feof($this->fp)) {
             $this->errno = 50;
@@ -83,6 +97,12 @@ class Core_Helper_Net_Tcp {
     public function recv($length, $timeoutsec = 2) {
         $this->errno = 0;
         $this->errstr = '';
+
+        if (!is_resource($this->fp)) {
+            $this->errno = 60;
+            $this->errstr = 'connection is close[recv]';
+            return '';
+        }
 
         if (@feof($this->fp)) {
             $this->errno = 50;
@@ -126,6 +146,12 @@ class Core_Helper_Net_Tcp {
     public function fgets($length = null, $timeoutsec = 2) {
         $this->errno = 0;
         $this->errstr = '';
+
+        if (!is_resource($this->fp)) {
+            $this->errno = 60;
+            $this->errstr = 'connection is close[fgets]';
+            return '';
+        }
 
         if (@feof($this->fp)) {
             $this->errno = 50;
