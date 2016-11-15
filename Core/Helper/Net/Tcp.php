@@ -101,6 +101,7 @@ class Core_Helper_Net_Tcp {
         if (@feof($this->fp)) {
             $this->errno = 50;
             $this->errstr = 'end of fp[recv]';
+            $this->close();
             return '';
         }
 
@@ -124,7 +125,8 @@ class Core_Helper_Net_Tcp {
                 $this->errstr = 'connection recv timeout';
                 break;
             }
-            if (isset($info['eof']) && $info['eof']) {
+            if (isset($info['eof']) && $info['eof']) { // 收到对面的FIN包，意味着对面不会再发生任何数据
+                $this->close(); // 因为是同步请求，且对面不会再发生数据，所以此处直接可以关闭连接
                 break;
             }
             if (!$tmp) {
@@ -150,6 +152,7 @@ class Core_Helper_Net_Tcp {
         if (@feof($this->fp)) {
             $this->errno = 50;
             $this->errstr = 'end of fp[fgets]';
+            $this->close();
             return '';
         }
 
@@ -163,12 +166,21 @@ class Core_Helper_Net_Tcp {
         $str = @fgets($this->fp, $length);
         $info = @stream_get_meta_data($this->fp);
 
-        if ($this->errno == 0 && isset($info['timed_out']) && $info['timed_out']) {
+        if (isset($info['timed_out']) && $info['timed_out']) {
             $this->errno = 40;
             $this->errstr = 'connection recv[fgets] timeout';
+            return $str;
         }
 
-        if ($this->errno == 0 && !$str) {
+        /**
+         * @see http://www.cnblogs.com/promise6522/archive/2012/03/03/2377935.html
+         */
+        if (isset($info['eof']) && $info['eof']) { // 收到对面的FIN包，意味着对面不会再发生任何数据
+            $this->close(); // 因为是同步请求，且对面不会再发生数据，所以此处直接可以关闭连接
+            return $str;
+        }
+
+        if (!$str) {
             $errData = error_get_last();
             $this->errno = $errData['type'];
             $this->errstr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
