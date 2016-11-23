@@ -36,7 +36,7 @@ class Core_Helper_Logger_Client extends Core_Lib_Logger {
             echo '<script type="text/javascript">';
             echo 'try{';
             foreach($this->logs as $log) {
-                echo 'console.'.static::$aLevels[$log[1]].'("'.$log[0].' '.addslashes((string)$log['2']).'");';
+                echo 'console.'.$log[1].'("'.$log[0].' '.addslashes((string)$log['2']).'");';
             }
             echo '}catch(e){}';
             echo '</script>';

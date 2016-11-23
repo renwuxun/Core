@@ -28,4 +28,15 @@ class Test_Controller_Test extends Core_Lib_Controller {
         Core_Lib_App::app()->getResponse()->setHeader('Content-Type', 'text/plain;charset=utf-8');
         return 'test/hbdf/'.$a;
     }
+
+    public function testlogAction() {
+        Core_Lib_App::app()->getLogger()->critical('critical message');
+        Core_Lib_App::app()->getLogger()->alert('alert message');
+        Core_Lib_App::app()->getLogger()->debug('debug message');
+        Core_Lib_App::app()->getLogger()->emergency('emergency message');
+        Core_Lib_App::app()->getLogger()->error('error message');
+        Core_Lib_App::app()->getLogger()->info('info message');
+        Core_Lib_App::app()->getLogger()->notice('notice message');
+        Core_Lib_App::app()->getLogger()->warning('warning message');
+    }
 }

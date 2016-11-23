@@ -25,7 +25,7 @@ class Core_Helper_Logger_File extends Core_Lib_Logger {
     }
 
     public static function filePath() {
-        return PROJECT_PATH.'/log.txt';
+        return PROJECT_PATH.'/Public/log.txt';
     }
 
     public function log($level, $message, array $context = array()) {

@@ -8,6 +8,7 @@
  */
 
 
+ini_set('display_errors', 'On');
 
 define('PROJECT_PATH', strtr(dirname(__DIR__), '\\', '/'));
 
