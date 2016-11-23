@@ -188,14 +188,6 @@ abstract class Core_Lib_Controller {
     }
 
     /**
-     * @return Core_Lib_Logger
-     * @author leozhang
-     */
-    public function getLogger($name) {
-        return Core_Lib_App::app()->getLogger($name);
-    }
-
-    /**
      * @param string $url
      * @param int $status
      * @param array $headers
