@@ -53,7 +53,8 @@ abstract class Core_Lib_Config{
             'routeName' => 'Core_Lib_Route',
             '404Controller' => 'Core_Controller_Notfound',
             'UUIDServer' => ['host'=>'127.0.0.1', 'port'=>9527],
-            'L5Server' => ['host'=>'127.0.0.1', 'port'=>9528]
+            'L5Server' => ['host'=>'127.0.0.1', 'port'=>9528],
+            'logger' => 'Core_Helper_Logger_File'
         ];
     }
 }
