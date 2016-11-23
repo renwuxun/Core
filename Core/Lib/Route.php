@@ -13,7 +13,8 @@ class Core_Lib_Route implements Core_Lib_IRoute{
     protected $actionName = 'index';
     protected $args = [];
 
-    public function init($path) {
+    public function __construct() {
+        $path = Core_Lib_App::app()->getRequest()->getPath();
         if (isset($path{1})) {
             $slice = array_filter(explode('/', trim($path, '/')));
             if (sizeof($slice) > 0) {

@@ -9,10 +9,6 @@
 
 
 interface Core_Lib_IRoute {
-    /**
-     * @param $path string
-     */
-    public function init($path);
 
     /**
      * @return string
