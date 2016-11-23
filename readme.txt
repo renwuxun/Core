@@ -1,1 +1,3 @@
 something like a framework
+
+logger需要在项目里面添加monolog第三方插件composer require monolog/monolog

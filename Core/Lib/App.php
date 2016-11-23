@@ -26,6 +26,12 @@ class Core_Lib_App {
     private $request;
 
     /**
+     * @var Core_Lib_Logger
+     * @author leo zhang
+     */
+    private $logger;
+
+    /**
      * @var Core_Lib_IRoute
      */
     private $route;
@@ -92,6 +98,18 @@ class Core_Lib_App {
             $this->request->init($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER, $_ENV);
         }
         return $this->request;
+    }
+
+    /**
+     * @author leo zhang
+     * @return Core_Lib_Logger
+     */
+    public function getLogger($name) {
+        if (null === $this->logger) {
+            $dir = $this->getConfig()->get('dir') != '' ? $this->getConfig()->get('dir') : PROJECT_PATH;
+            $this->logger = new Core_Lib_Logger($name, $dir);
+        }
+        return $this->logger;
     }
 
     /**
