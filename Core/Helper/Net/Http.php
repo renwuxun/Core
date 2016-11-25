@@ -85,10 +85,16 @@ class Core_Helper_Net_Http {
         }
         $msg = "$method $uri HTTP/1.1\r\n";
         $queryString = '';
+        $defaultHeaders = [
+            'Connection'=>'keep-alive',
+            'User-Agent'=>'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36',
+        ];
         if (!empty($data)) {
             $queryString = is_array($data) ? http_build_query($data) : $data;
-            $msg .= 'Content-Length: '.strlen($queryString)."\r\n";
+            $defaultHeaders['Content-Length'] = strlen($queryString);
+            $defaultHeaders['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
         }
+        $headers = array_merge($defaultHeaders, $headers);
         foreach($headers as $k=>$v) {
             $msg .= "{$k}: {$v}\r\n";
         }
