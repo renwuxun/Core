@@ -123,9 +123,7 @@ class Core_Helper_Net_Http {
             return $header;
         }
         $body = self::readBody($tcp, $header, $errno, $errstr, $timeoutsec);
-        if ($tcp->getErrno() != 0) {
-            $errno = $tcp->getErrno();
-            $errstr = $tcp->getErrstr();
+        if ($errno != 0) {
             return $header.$body;
         }
         return $body;
