@@ -106,10 +106,10 @@ class Core_Lib_App {
     public function getRoute() {
         if (null === $this->route) {
             $routeName = $this->getConfig()->get('routeName');
-            if (!is_subclass_of($routeName, 'Core_Lib_IRoute')) {
+            $this->route = new $routeName;
+            if (!$this->route instanceof Core_Lib_IRoute) {
                 throw new Exception($routeName.' need implements Core_Lib_IRoute');
             }
-            $this->route = new $routeName;
         }
         return $this->route;
     }
@@ -121,10 +121,10 @@ class Core_Lib_App {
     public function getController() {
         if (null === $this->controller) {
             $controllerName = $this->getRoute()->getControllerName();
-            if (!is_subclass_of($controllerName, 'Core_Lib_Controller')) {
+            $this->controller = new $controllerName;
+            if (!$this->controller instanceof Core_Lib_Controller) {
                 throw new Exception($controllerName.' must be subclass of Core_Lib_Controller');
             }
-            $this->controller = new $controllerName;
         }
         return $this->controller;
     }
@@ -147,10 +147,10 @@ class Core_Lib_App {
     public function getLogger() {
         if (null === $this->logger) {
             $sLogger = $this->getConfig()->get('logger');
-            if (!is_subclass_of($sLogger, 'Core_Lib_Logger')) {
+            $this->logger = new $sLogger;
+            if (!$this->logger instanceof Core_Lib_Logger) {
                 throw new Exception($sLogger.' must be subclass of Core_Lib_Logger');
             }
-            $this->logger = new $sLogger;
         }
         return $this->logger;
     }

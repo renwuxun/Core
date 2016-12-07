@@ -11,8 +11,8 @@
 
 class Test_Config_Dev extends Core_Lib_Config {
     public static function config() {
-        return [
+        return array(
             'logger'=>'Test_Lib_FileLogger'
-        ];
+        );
     }
 }

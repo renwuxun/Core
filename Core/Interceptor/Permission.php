@@ -49,7 +49,7 @@ abstract class Core_Interceptor_Permission extends Core_Lib_Interceptor implemen
         }
 
         $foundNeedGroups = false;
-        $needGroups = [];
+        $needGroups = array();
         foreach (static::pathGroupsMapping() as $k=>$v) {
             if ('/'.trim($k, '/') == $path) {
                 $foundNeedGroups = true;

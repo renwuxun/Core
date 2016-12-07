@@ -26,7 +26,7 @@ foreach ($lines as $k=>$line) {
     }
 }
 
-$fields=[];
+$fields=array();
 foreach ($lines as $k=>$line) {
     if (preg_match('/^`(\w+)`\s+/is', trim($line), $m)) {
         //echo $m[1]."\n";
@@ -37,8 +37,8 @@ foreach ($lines as $k=>$line) {
     }
 }
 
-$types=[];
-$typesInModel=[
+$types=array();
+$typesInModel=array(
     'char'=>'self::DATA_TYPE_STR',
     'varchar'=>'self::DATA_TYPE_STR',
     'text'=>'self::DATA_TYPE_STR',
@@ -68,7 +68,7 @@ $typesInModel=[
     'float'=>'self::DATA_TYPE_FLOAT',
     'double'=>'self::DATA_TYPE_FLOAT',
     'decimal'=>'self::DATA_TYPE_FLOAT',
-];
+);
 foreach ($lines as $k=>$line) {
     if (preg_match('/^`\w+`\s+([^\s\(]+)/is', trim($line), $m)) {
         //echo $m[1]."\n";
@@ -84,7 +84,7 @@ foreach ($lines as $k=>$line) {
     }
 }
 
-$comments=[];
+$comments=array();
 foreach ($lines as $k=>$line) {
     if (preg_match("/comment\s+'([^']+)'/is", trim($line), $m)) {
         //echo $m[1]."\n";

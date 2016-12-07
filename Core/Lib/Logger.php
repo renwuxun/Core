@@ -131,7 +131,7 @@ abstract class Core_Lib_Logger {
      * @return string
      */
     public static function replaceContext($message, array $context = array()) {
-        $_context = [];
+        $_context = array();
         foreach ($context as $k => $v) {
             $_context['{'.$k.'}'] = $v;
         }

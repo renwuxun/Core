@@ -25,10 +25,10 @@ class Core_Helper_Logger_Client extends Core_Lib_Logger {
     /**
      * @var array
      */
-    protected $logs = [];
+    protected $logs = array();
 
     public function log($level, $message, array $context = array()) {
-        $this->logs[] = [date('Y-m-d H:i:s'), self::$aLevels[$level], $message];
+        $this->logs[] = array(date('Y-m-d H:i:s'), self::$aLevels[$level], $message);
     }
 
     public function __destruct() {

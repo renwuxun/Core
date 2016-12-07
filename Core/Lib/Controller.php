@@ -33,7 +33,7 @@ abstract class Core_Lib_Controller {
      * @return array
      */
     protected static function selfInterceptors() {
-        return [];
+        return array();
     }
 
     protected static function viewPath() {
@@ -69,7 +69,7 @@ abstract class Core_Lib_Controller {
      * @param array $args
      * @return string
      */
-    public function run($sAction, $args = []) {
+    public function run($sAction, $args = array()) {
         $interceptors = array();
         $skipLogic = false;
         foreach ($this->getInterceptors() as $sInterceptor => $applyActs) {
@@ -134,7 +134,7 @@ abstract class Core_Lib_Controller {
         return $this->view;
     }
 
-    public function render($sView, $status = 200, $headers = []) {
+    public function render($sView, $status = 200, $headers = array()) {
         $response = Core_Lib_App::app()->getResponse();
         foreach ($headers as $k => $v) {
             $response->setHeader($k, $v);
@@ -143,7 +143,7 @@ abstract class Core_Lib_Controller {
         return $this->getView()->render($sView);
     }
 
-    public function renderJson($data = null, $status = 200, $headers = []) {
+    public function renderJson($data = null, $status = 200, $headers = array()) {
         $response = Core_Lib_App::app()->getResponse();
         $response->setHeader('Content-Type', 'application/javascript;charset=utf8');
         foreach ($headers as $k => $v) {
@@ -162,7 +162,7 @@ abstract class Core_Lib_Controller {
      * @param array $headers
      * @return string
      */
-    public function renderJsonCb($data = null, $status = 200, $headers = []) {
+    public function renderJsonCb($data = null, $status = 200, $headers = array()) {
         $jsoncb = $this->getRequest()->get('jsoncb', '');
         $ret = $this->renderJson($data, $status, $headers);
         return $jsoncb ? $jsoncb.'('.$ret.');' : $ret;
@@ -193,7 +193,7 @@ abstract class Core_Lib_Controller {
      * @param array $headers
      * @return string
      */
-    protected function redirect($url, $status = 302, $headers = []) {
+    protected function redirect($url, $status = 302, $headers = array()) {
         $content =
 '<!DOCTYPE html>
 <html>
@@ -210,7 +210,7 @@ abstract class Core_Lib_Controller {
 
         $content = sprintf($content, htmlspecialchars($url, ENT_QUOTES, 'UTF-8'));
 
-        $headers = array_merge($headers, ['Location'=>$url, 'Content-Length'=>strlen($content)]);
+        $headers = array_merge($headers, array('Location'=>$url, 'Content-Length'=>strlen($content)));
 
         foreach ($headers as $k=>$v) {
             $this->getResponse()->setHeader($k, $v);

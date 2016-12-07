@@ -13,12 +13,12 @@ class Core_Lib_Request {
     private $uri;
     private $path;
 
-    private $GET = [];
-    private $POST = [];
-    private $COOKIE = [];
-    private $FILES = [];
-    private $SERVER = [];
-    private $ENV = [];
+    private $GET = array();
+    private $POST = array();
+    private $COOKIE = array();
+    private $FILES = array();
+    private $SERVER = array();
+    private $ENV = array();
 
     public function init(
         $GET = null,

@@ -11,7 +11,7 @@ class Core_Lib_Route implements Core_Lib_IRoute{
 
     protected $controllerName = 'Core_Controller_Welcome';
     protected $actionName = 'index';
-    protected $args = [];
+    protected $args = array();
 
     public function __construct() {
         $path = Core_Lib_App::app()->getRequest()->getPath();
@@ -28,7 +28,7 @@ class Core_Lib_Route implements Core_Lib_IRoute{
             }
         }
 
-        if (!is_callable([$this->controllerName, $this->actionName.'Action'])) {
+        if (!is_callable(array($this->controllerName, $this->actionName.'Action'))) {
             $this->actionName = 'index';
             $this->controllerName = Core_Lib_App::app()->getConfig()->get('404Controller');
         }

@@ -137,7 +137,7 @@ class Core_Lib_Response {
     protected $statusCode = 200;
     protected $statusText = 'OK';
 
-    protected $headers = [];
+    protected $headers = array();
 
     protected $httpVersion = '1.0';
 
@@ -146,7 +146,7 @@ class Core_Lib_Response {
      */
     protected $content = '';
 
-    protected $cookies = [];
+    protected $cookies = array();
 
     public function setHeader($key, $value) {
         if (null === $value) {
@@ -201,7 +201,7 @@ class Core_Lib_Response {
     }
 
     public function setCookie($key, $value, $expires = 0, $path = '/', $domain = '') {
-        $this->cookies[$key] = [$value, $expires, $path, $domain];
+        $this->cookies[$key] = array($value, $expires, $path, $domain);
         return $this;
     }
 
