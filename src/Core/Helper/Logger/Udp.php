@@ -30,7 +30,7 @@ class Core_Helper_Logger_Udp extends Core_Lib_Logger {
      * @param string $message
      * @param array $context
      */
-    public function log($level, $message, array $context = []) {
+    public function log($level, $message, array $context = array()) {
         if (!isset(static::$aLevels[$level])) {
             return;
         }

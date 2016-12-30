@@ -11,9 +11,9 @@
 
 class Core_Helper_UUID {
     /**
-     * @var Core_Helper_Net_Tcp
+     * @var Core_Helper_Net_Http
      */
-    private $tcp;
+    private $http;
 
     private static $instance;
 
@@ -23,9 +23,15 @@ class Core_Helper_UUID {
     private $serverDown = false;
 
     private function __construct() {
-        $l5conf = Core_Lib_App::app()->getConfig()->get('UUIDServer');
-        $this->tcp = new Core_Helper_Net_Tcp;
-        $this->serverDown = !$this->tcp->connect($l5conf['host'], $l5conf['port']);
+        $conf = Core_Lib_App::app()->getConfig()->get('UUIDServer');
+
+        $tcp = new Core_Helper_Net_Tcp;
+        $tcp->setHost($conf['host'])
+            ->setPort($conf['port']);
+        $this->serverDown = !$tcp->connect();
+
+        $this->http = new Core_Helper_Net_Http;
+        $this->http->setTcp($tcp)->disableCookie();
     }
 
     public static function getInstance() {
@@ -46,15 +52,14 @@ class Core_Helper_UUID {
             $gpid = 0;// php生产的uuid特有的标记
             return $time_ms<<22 | $count<<9 | $gpid;
         }
-        $msg = Core_Helper_Net_Http::buildRequest('/', '', 'GET');
-        $this->tcp->send($msg);
-        $header = Core_Helper_Net_Http::readHeader($this->tcp);
-        $body = Core_Helper_Net_Http::readBody($this->tcp, $header, $this->errno, $this->errstr);
+        $body = $this->http->request('/', array('User-Agent'=>'Core(php)'));
+        $this->errno = $this->http->getErrno();
+        $this->errstr = $this->http->getErrstr();
         return (int)trim($body);
     }
 
     public function __destruct() {
-        $this->tcp->close();
+        $this->http->getTcp()->close();
     }
 
     /**

@@ -64,7 +64,7 @@ abstract class Core_Interceptor_Permission extends Core_Lib_Interceptor implemen
         if (empty($needGroups)) {
             return true;
         }
-
-        return !empty(array_intersect(static::getOnlineUserGroups(), $needGroups));
+        $arr = array_intersect(static::getOnlineUserGroups(), $needGroups);
+        return !empty($arr);
     }
 }

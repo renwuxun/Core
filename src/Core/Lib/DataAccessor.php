@@ -42,25 +42,11 @@ abstract class Core_Lib_DataAccessor {
     protected $errstr = '';
 
     /**
-     * @var Core_Lib_Conn
-     */
-    protected $conn;
-
-    /**
      * @param string $modelName
      * @return $this
      */
     public function setModel($modelName) {
         $this->modelName = $modelName;
-        return $this;
-    }
-
-    /**
-     * @param Core_Lib_Conn $conn
-     * @return $this
-     */
-    public function setConn($conn) {
-        $this->conn = $conn;
         return $this;
     }
 

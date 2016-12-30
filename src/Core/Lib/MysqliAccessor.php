@@ -13,6 +13,26 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
 
     protected $lastSql = '';
 
+    /**
+     * @var mysqli
+     */
+    protected $conn;
+
+    protected $table = '';
+
+    /**
+     * @param string $tableName
+     * @return $this
+     */
+    public function setTable($tableName) {
+        $this->table = $tableName;
+        return $this;
+    }
+
+    public function getTable() {
+        return $this->table;
+    }
+
     public function find() {
 //        /**
 //         * @var $modelName Core_Lib_DataObject
@@ -28,7 +48,7 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
         $orderBy = $this->prepareOrderBy();
         $limit = $this->prepareLimit();
 
-        $this->lastSql = "SELECT {$fields} FROM `{$this->conn->getTbname()}` {$where} {$orderBy} {$limit}";
+        $this->lastSql = "SELECT {$fields} FROM `{$this->table}` {$where} {$orderBy} {$limit}";
 
         $objs = array();
         if ($this->conn->real_query($this->lastSql)) {
@@ -70,7 +90,7 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
         $where = $this->prepareWhere();
         $limit = $this->prepareLimit();
 
-        $this->lastSql = "UPDATE `{$this->conn->getTbname()}` SET " . $setData . " $where $limit";
+        $this->lastSql = "UPDATE `{$this->table}` SET " . $setData . " $where $limit";
         if (!$this->conn->real_query($this->lastSql)) {
             return -1;
         }
@@ -99,7 +119,7 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
 
         $ignore = $ignore ? 'IGNORE' : '';
 
-        $this->lastSql = "INSERT $ignore INTO `{$this->conn->getTbname()}` (`" . implode('`,`', array_keys($this->setFields)) . "`) VALUES ('" . implode("','", array_map('addslashes', $this->setFields)) . "')";
+        $this->lastSql = "INSERT $ignore INTO `{$this->table}` (`" . implode('`,`', array_keys($this->setFields)) . "`) VALUES ('" . implode("','", array_map('addslashes', $this->setFields)) . "')";
         $this->setFields = array();//reset
         if (!$this->conn->real_query($this->lastSql)) {
             return -1;
@@ -125,7 +145,7 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
         $where = $this->prepareWhere();
         $limit = $this->prepareLimit();
 
-        $this->lastSql = "DELETE FROM `{$this->conn->getTbname()}` {$where} {$limit}";
+        $this->lastSql = "DELETE FROM `{$this->table}` {$where} {$limit}";
         if (!$this->conn->real_query($this->lastSql)) {
             return -1;
         }
@@ -151,7 +171,7 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
 
         $where = $this->prepareWhere();
 
-        $this->lastSql = "SELECT {$fields} FROM `{$this->conn->getTbname()}` {$where}";
+        $this->lastSql = "SELECT {$fields} FROM `{$this->table}` {$where}";
 
         if (!$this->conn->real_query($this->lastSql)) {
             return -1;
@@ -176,6 +196,9 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
     }
 
     protected function prepareFields() {
+        /**
+         * @var $modelName Core_Lib_DataObject
+         */
         $modelName = $this->modelName;
         $fields = implode(',',array_map(function($v){return "`$v`";},array_keys($modelName::fieldType())));
         if (!empty($this->loadFields)) {

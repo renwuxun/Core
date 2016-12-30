@@ -21,7 +21,7 @@ class Test_Controller_Test extends Core_Lib_Controller {
 
     public function jsonAction() {
 
-        return $this->renderJsonCb(['ab'=>'sfds'],200);
+        return $this->renderJsonCb(array('ab'=>'sfds'),200);
     }
 
     public function hbAction($a='') {

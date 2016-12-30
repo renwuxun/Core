@@ -13,7 +13,7 @@ ini_set('display_errors', 'On');
 define('PROJECT_PATH', strtr(dirname(__DIR__), '\\', '/'));
 
 
-$loader = require __DIR__ . '/../../Core/autoload.php';
+$loader = require __DIR__ . '/../../../src/Core/autoload.php';
 
 $loader->add('Test_', dirname(PROJECT_PATH));
 
