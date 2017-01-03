@@ -13,12 +13,12 @@ class Core_Lib_Request {
     private $uri;
     private $path;
 
-    private $GET = [];
-    private $POST = [];
-    private $COOKIE = [];
-    private $FILES = [];
-    private $SERVER = [];
-    private $ENV = [];
+    private $GET = array();
+    private $POST = array();
+    private $COOKIE = array();
+    private $FILES = array();
+    private $SERVER = array();
+    private $ENV = array();
 
     public function init(
         $GET = null,
@@ -153,6 +153,20 @@ class Core_Lib_Request {
      * @param callable $filterCallback trim,strip_tags,addslashes,htmlentities,htmlspecialchars
      * @return mixed
      */
+    public function request($key, $default = null, $filterCallback = null) {
+        $val = $this->post($key, null, $filterCallback);
+        if ($val === null) {
+            return $this->get($key, $default, $filterCallback);
+        }
+        return $val;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $default
+     * @param callable $filterCallback trim,strip_tags,addslashes,htmlentities,htmlspecialchars
+     * @return mixed
+     */
     public function cookie($key, $default = null, $filterCallback = null) {
         if (!isset($this->COOKIE[$key])) {
             return $default;
@@ -169,9 +183,104 @@ class Core_Lib_Request {
     }
 
     /**
+     * @param string $key
+     * @param null $default
+     * @return array|$default|null
+     */
+    public function file($key, $default = null) {
+        return isset($this->FILES[$key]) ? $this->FILES[$key] : $default;
+    }
+
+    /**
      * @return string
      */
     public function getHttpVersion() {
         return substr($this->SERVER['SERVER_PROTOCOL'], 5);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod() {
+        return $this->SERVER['REQUEST_METHOD'];
+    }
+
+    public function getHost(){
+        return isset($this->SERVER['HTTP_HOST']) ? $this->SERVER['HTTP_HOST'] : '';
+    }
+
+    public function getConnection(){
+        return isset($this->SERVER['HTTP_CONNECTION']) ? $this->SERVER['HTTP_CONNECTION'] : '';
+    }
+
+    public function getPragma(){
+        return isset($this->SERVER['HTTP_PRAGMA']) ? $this->SERVER['HTTP_PRAGMA'] : '';
+    }
+
+    public function getCacheControl(){
+        return isset($this->SERVER['HTTP_CACHE_CONTROL']) ? $this->SERVER['HTTP_CACHE_CONTROL'] : '';
+    }
+
+    public function getAccessControlRequestMethod(){
+        return isset($this->SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']) ? $this->SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'] : '';
+    }
+
+    public function getOrigin(){
+        return isset($this->SERVER['HTTP_ORIGIN']) ? $this->SERVER['HTTP_ORIGIN'] : '';
+    }
+
+    public function getUserAgent(){
+        return isset($this->SERVER['HTTP_USER_AGENT']) ? $this->SERVER['HTTP_USER_AGENT'] : '';
+    }
+
+    public function getAccessControlRequestHeaders(){
+        return isset($this->SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']) ? $this->SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'] : '';
+    }
+
+    public function getAccept(){
+        return isset($this->SERVER['HTTP_ACCEPT']) ? $this->SERVER['HTTP_ACCEPT'] : '';
+    }
+
+    public function getReferer(){
+        return isset($this->SERVER['HTTP_REFERER']) ? $this->SERVER['HTTP_REFERER'] : '';
+    }
+
+    public function getAcceptEncoding(){
+        return isset($this->SERVER['HTTP_ACCEPT_ENCODING']) ? $this->SERVER['HTTP_ACCEPT_ENCODING'] : '';
+    }
+
+    public function getAcceptLanguage(){
+        return isset($this->SERVER['HTTP_ACCEPT_LANGUAGE']) ? $this->SERVER['HTTP_ACCEPT_LANGUAGE'] : '';
+    }
+
+    /**
+     * @param bool $float
+     * @return int
+     */
+    public function getTime($float = false) {
+        $k = $float ? 'REQUEST_TIME_FLOAT' : 'REQUEST_TIME';
+        return isset($this->SERVER[$k]) ? (int)$this->SERVER[$k] : 0;
+    }
+
+    /**
+     * @param string $inKey eg: X-Auth-Token
+     * @return string
+     */
+    public function getHttpHeader($inKey) {
+        $inKey = strtr($inKey, '-', '_');
+        $inKey = strtoupper($inKey);
+        $inKey = 'HTTP_'.$inKey;
+        return isset($this->SERVER[$inKey]) ? $this->SERVER[$inKey] : '';
+    }
+
+    /**
+     * @return string http|https
+     */
+    public function getScheme() {
+        $scheme = 'http';
+        if(isset($this->SERVER['HTTPS']) && $this->SERVER['HTTPS'] == "on") {
+            $scheme = 'https';
+        }
+        return $scheme;
     }
 }

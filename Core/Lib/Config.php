@@ -11,10 +11,10 @@
 
 abstract class Core_Lib_Config{
 
-    private $config = [];
+    private $config = array();
 
     private static function internalConfig() {
-        return [];
+        return array();
     }
 
     private function getConfig() {
@@ -48,12 +48,13 @@ abstract class Core_Lib_Config{
     }
 
     protected static function config() {
-        return [
+        return array(
             'appId' => 9527,
             'routeName' => 'Core_Lib_Route',
             '404Controller' => 'Core_Controller_Notfound',
-            'UUIDServer' => ['host'=>'127.0.0.1', 'port'=>9527],
-            'L5Server' => ['host'=>'127.0.0.1', 'port'=>9528]
-        ];
+            'UUIDServer' => array('host'=>'127.0.0.1', 'port'=>9527),
+            'L5Server' => array('host'=>'127.0.0.1', 'port'=>9528),
+            'logger' => 'Core_Helper_Logger_File'
+        );
     }
 }

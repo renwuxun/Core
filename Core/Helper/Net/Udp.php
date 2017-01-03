@@ -36,26 +36,39 @@ class Core_Helper_Net_Udp {
 
 
 	public function connect() {
-		$this->fp = fsockopen('udp://' . $this->strHost, $this->iPort, $this->iLastErrNo, $this->strLastErr, $this->iTimeout);
-		if (!$this->fp) {
-			return false;
-		}
-		stream_set_timeout($this->fp, $this->iTimeout);
-		return true;
+		$this->fp = @fsockopen('udp://' . $this->strHost, $this->iPort, $this->iLastErrNo, $this->strLastErr, $this->iTimeout);
+        $errData = error_get_last();
+        if ($errData){
+            $this->iLastErrNo = $errData['type'];
+            $this->strLastErr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
+        }
+		return is_resource($this->fp);
 	}
 
-	public function send($strSend) {
-		$iSendLen = strlen($strSend);
-		$ret = fwrite($this->fp, $strSend, $iSendLen);
-		if ($ret != $iSendLen) {
-			$this->strLastErr = "fwrite failed. ret:[$ret]";
-			if (isset($stream_info['timed_out'])) {
-				$this->strLastErr .= ' socket_timed_out';
-			}
-			return false;
-		}
-		return true;
-	}
+    public function send($msg) {
+        $length = strlen($msg);
+        $wrote = 0;
+
+        if (!@stream_set_timeout($this->fp, $this->iTimeout)) {
+            $errData = error_get_last();
+            $this->iLastErrNo = $errData['type'];
+            $this->strLastErr = $errData['file'].':'.$errData['line'].', '.$errData['message'];
+            return $wrote;
+        }
+
+        while ($wrote<$length) {
+            $wrote += fwrite($this->fp, $msg, $length-$wrote);
+            $msg = substr($msg, $wrote);
+            $info = stream_get_meta_data($this->fp);
+            if ($info['timed_out']) {
+                $this->iLastErrNo = 20;
+                $this->strLastErr = 'udp send timeout';
+                break;
+            }
+        }
+
+        return $wrote;
+    }
 
 	public function close() {
 		if (is_resource($this->fp)) {

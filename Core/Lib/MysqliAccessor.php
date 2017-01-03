@@ -11,57 +11,24 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
 
     const OP_LIKE = 'like';
 
-    /**
-     * @var mysqli
-     */
-    protected $conn = null;
     protected $lastSql = '';
 
-
-    /**
-     * MysqliAccessor constructor.
-     * @param string $modelName
-     * @param mysqli $conn
-     * @throws Exception
-     */
-    public function __construct($modelName, $conn = null) {
-        $this->modelName = $modelName;
-
-        if ($conn) {
-            $this->conn = $conn;
-            return;
-        }
-
-        $conf = Core_Lib_App::app()->getConfig()->get('modelServers.'.$modelName);
-        if ($conf['sid'] > 0) {
-            $ipport = Core_Lib_L5::getInstance()->route($conf['sid']);
-            if (!empty($ipport) && $ipport[1] != '0') {
-                $conf['host'] = $ipport[0];
-                $conf['port'] = $ipport[1];
-            }
-        }
-        $this->conn = new mysqli($conf['host'], $conf['user'], $conf['psw'], $conf['dbname'], $conf['port']);
-        if ($this->conn->connect_errno != 0) {
-            throw new Exception('model server connect error: '.$this->conn->connect_error);
-        }
-    }
-
     public function find() {
-        /**
-         * @var $modelName Core_Lib_DataObject
-         */
-        $modelName = $this->modelName;
-
-        if ($this->key == '') {
-            throw new Exception($modelName . '::' . $modelName::keyField() . ' must be set by filter()');
-        }
+//        /**
+//         * @var $modelName Core_Lib_DataObject
+//         */
+//        $modelName = $this->modelName;
+//
+//        if ($this->shardingValue == '') {
+//            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
+//        }
 
         $fields = $this->prepareFields();
         $where = $this->prepareWhere();
         $orderBy = $this->prepareOrderBy();
         $limit = $this->prepareLimit();
 
-        $this->lastSql = "SELECT {$fields} FROM `{$modelName::table()}` {$where} {$orderBy} {$limit}";
+        $this->lastSql = "SELECT {$fields} FROM `{$this->conn->getTbname()}` {$where} {$orderBy} {$limit}";
 
         $objs = array();
         if ($this->conn->real_query($this->lastSql)) {
@@ -90,20 +57,20 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
             return false;
         }
 
-        /**
-         * @var $modelName Core_Lib_DataObject
-         */
-        $modelName = $this->modelName;
-
-        if($this->key == ''){
-            throw new Exception($modelName . '::' . $modelName::keyField() . ' must be set by filter()');
-        }
+//        /**
+//         * @var $modelName Core_Lib_DataObject
+//         */
+//        $modelName = $this->modelName;
+//
+//        if($this->shardingValue == ''){
+//            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
+//        }
 
         $setData = $this->prepareSetdata();
         $where = $this->prepareWhere();
         $limit = $this->prepareLimit();
 
-        $this->lastSql = "UPDATE `{$modelName::table()}` SET " . $setData . " $where $limit";
+        $this->lastSql = "UPDATE `{$this->conn->getTbname()}` SET " . $setData . " $where $limit";
         if (!$this->conn->real_query($this->lastSql)) {
             return -1;
         }
@@ -121,18 +88,18 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
             return -1;
         }
 
-        /**
-         * @var $modelName Core_Lib_DataObject
-         */
-        $modelName = $this->modelName;
-
-        if($this->key == ''){
-            throw new Exception($modelName . '::' . $modelName::keyField() . ' must be set by filter()');
-        }
+//        /**
+//         * @var $modelName Core_Lib_DataObject
+//         */
+//        $modelName = $this->modelName;
+//
+//        if($this->shardingValue == ''){
+//            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
+//        }
 
         $ignore = $ignore ? 'IGNORE' : '';
 
-        $this->lastSql = "INSERT $ignore INTO `{$modelName::table()}` (`" . implode('`,`', array_keys($this->setFields)) . "`) VALUES ('" . implode("','", array_map('addslashes', $this->setFields)) . "')";
+        $this->lastSql = "INSERT $ignore INTO `{$this->conn->getTbname()}` (`" . implode('`,`', array_keys($this->setFields)) . "`) VALUES ('" . implode("','", array_map('addslashes', $this->setFields)) . "')";
         $this->setFields = array();//reset
         if (!$this->conn->real_query($this->lastSql)) {
             return -1;
@@ -146,19 +113,19 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
      * @throws Exception
      */
     public function delete() {
-        /**
-         * @var $modelName Core_Lib_DataObject
-         */
-        $modelName = $this->modelName;
-
-        if($this->key == ''){
-            throw new Exception($modelName . '::' . $modelName::keyField() . ' must be set by filter()');
-        }
+//        /**
+//         * @var $modelName Core_Lib_DataObject
+//         */
+//        $modelName = $this->modelName;
+//
+//        if($this->shardingValue == ''){
+//            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
+//        }
 
         $where = $this->prepareWhere();
         $limit = $this->prepareLimit();
 
-        $this->lastSql = "DELETE FROM `{$modelName::table()}` {$where} {$limit}";
+        $this->lastSql = "DELETE FROM `{$this->conn->getTbname()}` {$where} {$limit}";
         if (!$this->conn->real_query($this->lastSql)) {
             return -1;
         }
@@ -171,20 +138,20 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
      * @throws Exception
      */
     public function count() {
-        /**
-         * @var $modelName Core_Lib_DataObject
-         */
-        $modelName = $this->modelName;
-
-        if($this->key == ''){
-            throw new Exception($modelName . '::' . $modelName::keyField() . ' must be set by filter()');
-        }
+//        /**
+//         * @var $modelName Core_Lib_DataObject
+//         */
+//        $modelName = $this->modelName;
+//
+//        if($this->shardingValue == ''){
+//            throw new Exception($modelName . '::' . $modelName::shardingField() . ' must be set by filter()');
+//        }
 
         $fields = 'count(*) as cnt';
 
         $where = $this->prepareWhere();
 
-        $this->lastSql = "SELECT {$fields} FROM `{$modelName::table()}` {$where}";
+        $this->lastSql = "SELECT {$fields} FROM `{$this->conn->getTbname()}` {$where}";
 
         if (!$this->conn->real_query($this->lastSql)) {
             return -1;
@@ -209,7 +176,8 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
     }
 
     protected function prepareFields() {
-        $fields = '*';
+        $modelName = $this->modelName;
+        $fields = implode(',',array_map(function($v){return "`$v`";},array_keys($modelName::fieldType())));
         if (!empty($this->loadFields)) {
             $fields = '`' . implode('`,`', $this->loadFields) . '`';
         }
@@ -251,21 +219,21 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
             }
             $orderBy = rtrim($orderBy, ',');
         }
+        if ($orderBy!='') {
+            $orderBy = 'ORDER BY '.$orderBy;
+        }
         $this->sorts = array();//reset
         return $orderBy;
     }
 
     protected function prepareLimit() {
-        if ($this->limit<1) {
-            $this->limit = static::DEFAULT_LIMIT;
-        }
         if ($this->offset == 0 ) {
             $limit = "LIMIT {$this->limit}";
         }else{
             $limit = "LIMIT {$this->offset},{$this->limit}";
         }
         $this->offset = 0;//reset
-        $this->limit = static::DEFAULT_LIMIT;//reset
+        $this->limit = 1000;//reset
         return $limit;
     }
 
@@ -276,7 +244,14 @@ class Core_Lib_MysqliAccessor extends Core_Lib_DataAccessor {
         return $this->conn->insert_id;
     }
 
+    /**
+     * @return string
+     */
+    public function getLastSql() {
+        return $this->lastSql;
+    }
+
     protected function halt($msg) {
-        throw new Exception($msg, -1);
+        throw new Exception($msg);
     }
 }

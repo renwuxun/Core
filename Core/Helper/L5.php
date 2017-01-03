@@ -12,8 +12,8 @@ class Core_Helper_L5 {
     private static $instance;
     private function __construct() {
         $l5conf = Core_Lib_App::app()->getConfig()->get('L5Server');
-        $this->tcp = new Core_Helper_Net_Tcp($l5conf['host'], $l5conf['port']);
-        $this->tcp->connect();
+        $this->tcp = new Core_Helper_Net_Tcp;
+        $this->tcp->connect($l5conf['host'], $l5conf['port']);
     }
 
     public static function getInstance() {

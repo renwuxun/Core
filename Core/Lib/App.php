@@ -41,6 +41,11 @@ class Core_Lib_App {
     private $response;
 
     /**
+     * @var Core_Lib_Logger
+     */
+    private $logger;
+
+    /**
      * App constructor.
      * @param $config Core_Lib_Config
      */
@@ -96,23 +101,30 @@ class Core_Lib_App {
 
     /**
      * @return Core_Lib_IRoute
+     * @throws Exception
      */
     public function getRoute() {
         if (null === $this->route) {
             $routeName = $this->getConfig()->get('routeName');
             $this->route = new $routeName;
-            $this->route->init($this->getRequest()->getPath());
+            if (!$this->route instanceof Core_Lib_IRoute) {
+                throw new Exception($routeName.' need implements Core_Lib_IRoute');
+            }
         }
         return $this->route;
     }
 
     /**
      * @return Core_Lib_Controller
+     * @throws Exception
      */
     public function getController() {
         if (null === $this->controller) {
             $controllerName = $this->getRoute()->getControllerName();
             $this->controller = new $controllerName;
+            if (!$this->controller instanceof Core_Lib_Controller) {
+                throw new Exception($controllerName.' must be subclass of Core_Lib_Controller');
+            }
         }
         return $this->controller;
     }
@@ -126,5 +138,20 @@ class Core_Lib_App {
             $this->response->setHttpVersion($this->getRequest()->getHttpVersion());
         }
         return $this->response;
+    }
+
+    /**
+     * @return Core_Lib_Logger
+     * @throws Exception
+     */
+    public function getLogger() {
+        if (null === $this->logger) {
+            $sLogger = $this->getConfig()->get('logger');
+            $this->logger = new $sLogger;
+            if (!$this->logger instanceof Core_Lib_Logger) {
+                throw new Exception($sLogger.' must be subclass of Core_Lib_Logger');
+            }
+        }
+        return $this->logger;
     }
 }

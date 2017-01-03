@@ -10,11 +10,6 @@
 
 abstract class Core_Lib_DataAccessor {
 
-    /**
-     * @var static[]
-     */
-    protected static $instances;
-
     const OP_GREATER_THAN = '>';
     const OP_GREATER_THAN_OR_EQUAL_TO = '>=';
     const OP_LESS_THAN = '<';
@@ -30,7 +25,7 @@ abstract class Core_Lib_DataAccessor {
     protected $filterKeys = array();
     protected $filterOps = array();
     protected $filterVals = array();
-    protected $key = '';
+    protected $shardingValue = '';
 
     protected $setFields = array();
 
@@ -40,15 +35,36 @@ abstract class Core_Lib_DataAccessor {
 
     protected $offset = 0;
     protected $limit = 1000;
-    const DEFAULT_LIMIT = 1000;
 
     protected $memo = array();
 
     protected $errno = 0;
     protected $errstr = '';
 
-    public function filter($key, $val) {
+    /**
+     * @var Core_Lib_Conn
+     */
+    protected $conn;
 
+    /**
+     * @param string $modelName
+     * @return $this
+     */
+    public function setModel($modelName) {
+        $this->modelName = $modelName;
+        return $this;
+    }
+
+    /**
+     * @param Core_Lib_Conn $conn
+     * @return $this
+     */
+    public function setConn($conn) {
+        $this->conn = $conn;
+        return $this;
+    }
+
+    public function filter($key, $val) {
         return $this->filterByOp($key, is_array($val) ? self::OP_IN : self::OP_EQUAL, $val);
     }
 
@@ -63,12 +79,12 @@ abstract class Core_Lib_DataAccessor {
         /**
          * @var $modelName Core_Lib_DataObject
          */
-        $modelName = $this->getModelName();
-        if ($key == $modelName::keyField()) {
+        $modelName = $this->modelName;
+        if ($key == $modelName::shardingField()) {
             if ($op != self::OP_EQUAL) {
-                throw new Exception('key字段只支持=号过滤');
+                throw new Exception('sharding字段只支持"="过滤');
             }
-            $this->key = $val;
+            $this->shardingValue = $val;
         }
 
         $i = array_search($key, $this->filterKeys);
@@ -91,7 +107,7 @@ abstract class Core_Lib_DataAccessor {
          * @var Core_Lib_DataObject $o
          */
         $o = new $this->modelName;
-        $o->setCreateByDataAccessor();
+        $o->createByDataAccessor();
         return $o;
     }
 
@@ -102,40 +118,28 @@ abstract class Core_Lib_DataAccessor {
         /**
          * @var $modelName Core_Lib_DataObject
          */
-        $modelName = $this->getModelName();
+        $modelName = $this->modelName;
         $this->loadFields = array_intersect(array_keys($modelName::fieldType()), $fields);
-
         return $this;
-    }
-
-    protected function getModelName() {
-        if (''==$this->modelName) {
-            $classname = get_class($this);
-            throw new Exception($classname.'::modelName must init in '.$classname.'::__construct', -1);
-        }
-        return $this->modelName;
     }
 
     /**
      * @param $key
-     * @param int $type
+     * @param string $type
      * @return $this
      */
-    public function sort($key, $type = SORT_DESC) {
+    public function sort($key, $type = self::SORT_TYPE_DESC) {
         $this->sorts[$key] = $type;
-
         return $this;
     }
 
     public function offset($offset) {
         $this->offset = $offset;
-
         return $this;
     }
 
     public function limit($limit) {
         $this->limit = $limit;
-
         return $this;
     }
 
@@ -148,12 +152,12 @@ abstract class Core_Lib_DataAccessor {
         /**
          * @var $modelName Core_Lib_DataObject
          */
-        $modelName = $this->getModelName();
+        $modelName = $this->modelName;
         $fieldType = $modelName::fieldType();
         if (isset($fieldType[$key])) {
             $this->setFields[$key] = $val;
-            if ($key == $modelName::keyField()) {
-                $this->key = $val;
+            if ($key == $modelName::shardingField()) {
+                $this->shardingValue = $val;
             }
         }
         return $this;
@@ -181,17 +185,17 @@ abstract class Core_Lib_DataAccessor {
     abstract public function find();
 
     /**
-     * @return bool
+     * @return int
      */
     abstract public function update();
 
     /**
-     * @return bool
+     * @return int
      */
     abstract public function insert();
 
     /**
-     * @return bool
+     * @return int
      */
     abstract public function delete();
 

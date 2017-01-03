@@ -23,7 +23,7 @@ abstract class Core_Lib_Widget extends Core_Lib_Controller {
      * @param array $args
      * @return string
      */
-    public function run($sAction, $args = []) {
+    public function run($sAction, $args = array()) {
         $cacheHandler = $this->getCacheHandler();
         if (null !== $cacheHandler) {
             $cacheKey = $this->getCacheKey();

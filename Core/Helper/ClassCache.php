@@ -21,7 +21,7 @@ Core_Helper_ClassCache::run(
  * Class Core_Helper_ClassCache
  */
 class Core_Helper_ClassCache {
-    private static $classList = [];
+    private static $classList = array();
     public static function run($cacheFile, $callback) {
         if (file_exists($cacheFile)) {
             include($cacheFile);
