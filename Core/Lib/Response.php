@@ -269,8 +269,10 @@ class Core_Lib_Response {
 
     /**
      * @param int $lastModifiedAt
+     * @return $this
      */
     public function setLastModifiedAt($lastModifiedAt) {
         $this->setHeader('Last-Modified', gmdate('D, d M Y H:i:s \G\M\T', $lastModifiedAt));
+        return $this;
     }
 }

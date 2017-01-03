@@ -43,7 +43,7 @@ class Core_Lib_Request {
      */
     public function getUri() {
         if (null === $this->uri) {
-            $this->uri = isset($this->SERVER['REQUEST_URI']) ? $this->SERVER['REQUEST_URI'] : '';
+            $this->uri = isset($this->SERVER['REQUEST_URI']) ? $this->SERVER['REQUEST_URI'] : '/';
         }
         return $this->uri;
     }
@@ -53,8 +53,7 @@ class Core_Lib_Request {
      */
     public function getPath() {
         if (null === $this->path) {
-            $qeury = parse_url($this->getUri());
-            $this->path = '/'.trim($qeury['path'], '/');
+            $this->path = parse_url($this->getUri(), PHP_URL_PATH);
         }
         return $this->path;
     }
