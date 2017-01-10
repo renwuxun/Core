@@ -11,6 +11,16 @@
 
 abstract class Core_Lib_Config{
 
+    public function __construct() {
+        if (!defined('PROJECT_PATH')) {
+            $cn = get_called_class();
+            $r = new ReflectionClass($cn);
+            list(,$incompleteFilename) = explode('_', $cn, 2);
+            $pos = strpos($r->getFileName(), '/'.strtr($incompleteFilename, array('_'=>'/')).'.php');
+            define('PROJECT_PATH', substr($r->getFileName(), 0, $pos));
+        }
+    }
+
     private $config = array();
 
     private static function internalConfig() {
