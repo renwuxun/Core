@@ -16,8 +16,9 @@ abstract class Core_Lib_Config{
             $cn = get_called_class();
             $r = new ReflectionClass($cn);
             list(,$incompleteFilename) = explode('_', $cn, 2);
-            $pos = strpos($r->getFileName(), '/'.strtr($incompleteFilename, array('_'=>'/')).'.php');
-            define('PROJECT_PATH', substr($r->getFileName(), 0, $pos));
+            $filepath = strtr($r->getFileName(),array('\\'=>'/'));
+            $pos = strpos($filepath, '/'.strtr($incompleteFilename, array('_'=>'/')).'.php');
+            define('PROJECT_PATH', substr($filepath, 0, $pos));
         }
     }
 
