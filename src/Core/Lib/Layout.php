@@ -11,7 +11,7 @@
 abstract class Core_Lib_Layout extends Core_Lib_Widget {
 
     protected static function viewPath() {
-        return PROJECT_PATH . 'View/Layout/';
+        return PROJECT_PATH . '/View/Layout';
     }
 
 }

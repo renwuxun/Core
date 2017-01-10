@@ -12,6 +12,7 @@ class Core_Lib_Request {
 
     private $uri;
     private $path;
+    private $pathInfo;
 
     private $GET = array();
     private $POST = array();
@@ -56,6 +57,21 @@ class Core_Lib_Request {
             $this->path = parse_url($this->getUri(), PHP_URL_PATH);
         }
         return $this->path;
+    }
+
+    public function getPathInfo() {
+        if (null === $this->pathInfo) {
+            if (false === strpos($this->getPath(), '.php')) {
+                $this->pathInfo = $this->getPath();
+            } else {
+                if (preg_match('#.*?\.php(/.*)#i', $this->getPath(), $m)) {
+                    $this->pathInfo = $m[1];
+                } else {
+                    $this->pathInfo = '/';
+                }
+            }
+        }
+        return $this->pathInfo;
     }
 
     /**

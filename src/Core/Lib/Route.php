@@ -14,9 +14,9 @@ class Core_Lib_Route implements Core_Lib_IRoute{
     protected $args = array();
 
     public function __construct() {
-        $path = Core_Lib_App::app()->getRequest()->getPath();
-        if (isset($path{1})) {
-            $slice = array_filter(explode('/', trim($path, '/')));
+        $pathInfo = Core_Lib_App::app()->getRequest()->getPathInfo();
+        if (isset($pathInfo{1})) {
+            $slice = array_filter(explode('/', trim($pathInfo, '/')));
             if (sizeof($slice) > 0) {
                 $this->controllerName = basename(PROJECT_PATH).'_Controller_'.ucfirst(array_shift($slice));
             }

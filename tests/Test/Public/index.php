@@ -9,19 +9,14 @@
 
 
 ini_set('display_errors', 'On');
-
-define('PROJECT_PATH', strtr(dirname(__DIR__), '\\', '/'));
-
-
-$loader = require __DIR__ . '/../../../src/Core/autoload.php';
-
-$loader->add('Test_', dirname(PROJECT_PATH));
+error_reporting(E_ALL);
 
 
 
-//Core_Helper_ClassCache::run(
-//    PROJECT_PATH.'/Cache/ClassesCached',
-//    function(){
-        Core_Lib_App::createApp(new Test_Config_Dev())->run();
-//    }
-//);
+
+require __DIR__ . '/../../../vendor/autoload.php';
+
+
+
+
+Core_Lib_App::createApp(new Test_Config_Dev())->run();
