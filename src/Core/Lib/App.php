@@ -51,6 +51,14 @@ class Core_Lib_App {
      */
     private function __construct($config) {
         $this->config = $config;
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $baseUri = '/';
+            if (preg_match('#.*?\.php/#i', $path, $m)) {
+                $baseUri = $m[0];
+            }
+            define('BASE_URI', $baseUri);
+        }
     }
 
     /**
